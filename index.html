@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catatan Penjualan Modern & Soft</title>
+    <style>
+        /* Palet Warna Soft: 
+           Background: #F7F9FC (Putih keabuan sangat muda)
+           Aksen: #7E97A6 (Biru keabuan lembut) / #A8DADC (Hijau Mint lembut)
+           Teks: #333333 (Abu tua)
+        */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 30px;
+            background-color: #F7F9FC; /* Soft Light Grayish-Blue */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .card-container {
+            background-color: #FFFFFF;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05); /* Shadow lembut */
+            max-width: 450px;
+            width: 100%;
+            border: 1px solid #EDEDED; /* Garis tepi sangat tipis */
+        }
+        h2 {
+            text-align: center;
+            color: #333333;
+            margin-bottom: 30px;
+            font-weight: 600;
+        }
+        label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 500;
+            color: #555555;
+            font-size: 0.95em;
+        }
+        input[type="date"], input[type="number"] {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 25px;
+            border: 1px solid #D1D9E6; /* Border lembut */
+            border-radius: 8px;
+            box-sizing: border-box;
+            font-size: 1em;
+            color: #333333;
+            transition: border-color 0.3s;
+        }
+        input:focus {
+            border-color: #A8DADC; /* Fokus dengan warna Mint lembut */
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(168, 218, 220, 0.4);
+        }
+        
+        /* Styling khusus untuk input Rupiah agar terlihat modern */
+        .rupiah-input-group {
+            position: relative;
+        }
+        .rupiah-prefix {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #999;
+            font-weight: 600;
+            pointer-events: none;
+            font-size: 1em;
+        }
+        input[type="number"] {
+            padding-left: 40px; /* Ruang untuk 'Rp' */
+        }
+        
+        /* Gaya Tombol (Button) */
+        button {
+            background-color: #7E97A6; /* Warna utama (Biru keabuan lembut) */
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 1.05em;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+        button:hover {
+            background-color: #6A8291; /* Sedikit lebih gelap saat hover */
+            transform: translateY(-1px);
+        }
+        button:active {
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+
+<div class="card-container">
+    <h2>✨ Catatan Penjualan Harian</h2>
+    <form id="sales-form">
+        
+        <div>
+            <label for="tanggal">🗓️ Tanggal Penjualan:</label>
+            <input type="date" id="tanggal" name="tanggal" required>
+        </div>
+        
+        <div>
+            <label for="nominal">💰 Nominal Penjualan:</label>
+            <div class="rupiah-input-group">
+                <span class="rupiah-prefix">Rp</span>
+                <input type="number" id="nominal" name="nominal" min="0" step="1000" placeholder="Masukkan Nominal Penjualan..." required>
+            </div>
+        </div>
+        
+        <button type="submit">Simpan Catatan</button>
+        
+    </form>
+</div>
+
+</body>
+</html>
