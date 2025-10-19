@@ -5,16 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Catatan Penjualan Modern & Soft</title>
     <style>
-        /* Palet Warna Soft: 
-           Background: #F7F9FC (Putih keabuan sangat muda)
-           Aksen: #7E97A6 (Biru keabuan lembut) / #A8DADC (Hijau Mint lembut)
-           Teks: #333333 (Abu tua)
-        */
+        /* Palet Warna Soft */
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
             padding: 30px;
-            background-color: #F7F9FC; /* Soft Light Grayish-Blue */
+            background-color: #F7F9FC;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -24,42 +20,54 @@
             background-color: #FFFFFF;
             padding: 40px;
             border-radius: 12px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05); /* Shadow lembut */
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
             max-width: 450px;
             width: 100%;
-            border: 1px solid #EDEDED; /* Garis tepi sangat tipis */
-        }
-        h2 {
+            border: 1px solid #EDEDED;
             text-align: center;
+        }
+
+        /* === Bagian Logo === */
+        .logo {
+            width: 100px;
+            height: 100px;
+            object-fit: contain;
+            margin-bottom: 15px;
+        }
+
+        h2 {
             color: #333333;
             margin-bottom: 30px;
             font-weight: 600;
         }
+
         label {
             display: block;
+            text-align: left;
             margin-bottom: 6px;
             font-weight: 500;
             color: #555555;
             font-size: 0.95em;
         }
-        input[type="date"], input[type="number"] {
+
+        input[type="date"], input[type="number"], input[type="file"] {
             width: 100%;
             padding: 12px;
             margin-bottom: 25px;
-            border: 1px solid #D1D9E6; /* Border lembut */
+            border: 1px solid #D1D9E6;
             border-radius: 8px;
             box-sizing: border-box;
             font-size: 1em;
             color: #333333;
             transition: border-color 0.3s;
         }
+
         input:focus {
-            border-color: #A8DADC; /* Fokus dengan warna Mint lembut */
+            border-color: #A8DADC;
             outline: none;
             box-shadow: 0 0 0 2px rgba(168, 218, 220, 0.4);
         }
-        
-        /* Styling khusus untuk input Rupiah agar terlihat modern */
+
         .rupiah-input-group {
             position: relative;
         }
@@ -74,12 +82,11 @@
             font-size: 1em;
         }
         input[type="number"] {
-            padding-left: 40px; /* Ruang untuk 'Rp' */
+            padding-left: 40px;
         }
-        
-        /* Gaya Tombol (Button) */
+
         button {
-            background-color: #7E97A6; /* Warna utama (Biru keabuan lembut) */
+            background-color: #7E97A6;
             color: white;
             padding: 12px 20px;
             border: none;
@@ -92,18 +99,36 @@
             transition: background-color 0.3s ease, transform 0.2s ease;
         }
         button:hover {
-            background-color: #6A8291; /* Sedikit lebih gelap saat hover */
+            background-color: #6A8291;
             transform: translateY(-1px);
         }
         button:active {
             transform: translateY(0);
+        }
+
+        /* Preview Gambar Penjualan */
+        .image-preview {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .image-preview img {
+            max-width: 100%;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            display: none;
         }
     </style>
 </head>
 <body>
 
 <div class="card-container">
+
+    <!-- ==== Ganti nama file logo di bawah ini ==== -->
+    <img src="logo_toko.png" alt="Logo Toko" class="logo">
+    <!-- Contoh lain: <img src="logo_saya.jpg" alt="Logo Toko" class="logo"> -->
+    
     <h2>✨ Catatan Penjualan Harian</h2>
+    
     <form id="sales-form">
         
         <div>
@@ -118,11 +143,39 @@
                 <input type="number" id="nominal" name="nominal" min="0" step="1000" placeholder="Masukkan Nominal Penjualan..." required>
             </div>
         </div>
-        
+
+        <div>
+            <label for="gambar">📷 Gambar Penjualan:</label>
+            <input type="file" id="gambar" name="gambar" accept="image/*">
+        </div>
+
+        <div class="image-preview">
+            <img id="preview-img" alt="Preview Gambar">
+        </div>
+
         <button type="submit">Simpan Catatan</button>
-        
     </form>
 </div>
+
+<script>
+    // Preview gambar otomatis saat dipilih
+    const inputGambar = document.getElementById('gambar');
+    const previewImg = document.getElementById('preview-img');
+
+    inputGambar.addEventListener('change', function() {
+        const file = this.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                previewImg.src = e.target.result;
+                previewImg.style.display = 'block';
+            }
+            reader.readAsDataURL(file);
+        } else {
+            previewImg.style.display = 'none';
+        }
+    });
+</script>
 
 </body>
 </html>
