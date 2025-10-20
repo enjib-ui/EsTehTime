@@ -84,8 +84,8 @@
     .rupiah-prefix {
       position: absolute;
       left: 12px;
-      top: 32%;
-      transform: translateY(-30%);
+      top: 50%;
+      transform: translateY(-50%);
       color: #555;
       font-weight: 600;
       pointer-events: none;
@@ -114,6 +114,10 @@
     button:hover {
       background-color: #6A8291;
       transform: translateY(-1px);
+    }
+
+    button:active {
+      transform: translateY(0);
     }
 
     .preview-card {
@@ -158,19 +162,6 @@
     .btn-resend:hover {
       background-color: #4cae4c;
     }
-
-    a.view-data {
-      display: inline-block;
-      margin-top: 15px;
-      text-decoration: none;
-      color: #0077cc;
-      font-weight: 500;
-      font-size: 0.95em;
-    }
-
-    a.view-data:hover {
-      text-decoration: underline;
-    }
   </style>
 </head>
 <body>
@@ -205,8 +196,6 @@
       <button class="btn-edit" id="btn-edit">Edit</button>
       <button class="btn-resend" id="btn-resend">Kirim Ulang</button>
     </div>
-
-    <a href="data.html" class="view-data">📊 Lihat Semua Catatan</a>
   </div>
 </div>
 
@@ -219,7 +208,7 @@
   const btnEdit = document.getElementById('btn-edit');
   const btnResend = document.getElementById('btn-resend');
 
-  // Format angka otomatis (contoh: 50.000)
+  // Format angka ke format ribuan
   nominalInput.addEventListener('input', function() {
     let value = this.value.replace(/\D/g, '');
     if (value) {
@@ -229,7 +218,7 @@
     }
   });
 
-  // Simpan data dan tampilkan preview
+  // Simpan ke data.html lewat localStorage
   form.addEventListener('submit', function(e) {
     e.preventDefault();
 
@@ -241,12 +230,11 @@
       return;
     }
 
-    // Simpan ke LocalStorage
-    const catatanLama = JSON.parse(localStorage.getItem('penjualan')) || [];
-    catatanLama.push({ tanggal, nominal });
-    localStorage.setItem('penjualan', JSON.stringify(catatanLama));
+    // Simpan data ke localStorage
+    const penjualan = JSON.parse(localStorage.getItem('penjualan')) || [];
+    penjualan.push({ tanggal, nominal });
+    localStorage.setItem('penjualan', JSON.stringify(penjualan));
 
-    // Tampilkan preview
     previewTanggal.textContent = tanggal;
     previewNominal.textContent = "Rp " + nominal;
     previewCard.style.display = 'block';
@@ -261,8 +249,7 @@
 
   // Tombol Kirim Ulang
   btnResend.addEventListener('click', function() {
-    alert("✅ Data telah disimpan ulang dan akan tampil di data.html");
-    window.location.href = "data.html";
+    alert("✅ Data telah dikirim ulang:\nTanggal: " + previewTanggal.textContent + "\nNominal: " + previewNominal.textContent);
   });
 </script>
 
