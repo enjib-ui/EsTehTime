@@ -1,168 +1,55 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Catatan Penjualan Modern & Soft</title>
-  <style>
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      margin: 0;
-      padding: 30px;
-      min-height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      background-image: url('background.jpg');
-      background-size: cover;
-      background-position: center;
-      background-repeat: no-repeat;
-      background-color: rgba(247, 249, 252, 0.85);
-      background-blend-mode: lighten;
-    }
-
-    .card-container {
-      background-color: rgba(255, 255, 255, 0.92);
-      padding: 40px;
-      border-radius: 16px;
-      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
-      max-width: 450px;
-      width: 100%;
-      border: 1px solid #EDEDED;
-      text-align: center;
-      backdrop-filter: blur(6px);
-      transition: all 0.3s ease;
-    }
-
-    .logo {
-      width: 100px;
-      height: 100px;
-      object-fit: contain;
-      margin-bottom: 5px;
-    }
-
-    h2 {
-      color: #333333;
-      margin-top: 0;
-      margin-bottom: 20px;
-      font-weight: 600;
-      line-height: 1.2;
-    }
-
-    label {
-      display: block;
-      text-align: left;
-      margin-bottom: 6px;
-      font-weight: 500;
-      color: #555555;
-      font-size: 0.95em;
-    }
-
-    input[type="date"], input[type="text"] {
-      width: 100%;
-      padding: 12px;
-      margin-bottom: 25px;
-      border: 1px solid #D1D9E6;
-      border-radius: 8px;
-      box-sizing: border-box;
-      font-size: 1em;
-      color: #333333;
-      transition: border-color 0.3s;
-      background-color: #FFFFFF;
-    }
-
-    input:focus {
-      border-color: #A8DADC;
-      outline: none;
-      box-shadow: 0 0 0 2px rgba(168, 218, 220, 0.4);
-    }
-
-    .rupiah-input-group {
-      position: relative;
-    }
-
-    .rupiah-prefix {
-      position: absolute;
-      left: 12px;
-      top: 50%;
-      transform: translateY(-50%);
-      color: #555;
-      font-weight: 600;
-      pointer-events: none;
-      font-size: 1em;
-      letter-spacing: 0.5px;
-    }
-
-    input#nominal {
-      padding-left: 40px;
-    }
-
-    button {
-      background-color: #7E97A6;
-      color: white;
-      padding: 12px 20px;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      width: 100%;
-      font-size: 1.05em;
-      font-weight: 600;
-      letter-spacing: 0.5px;
-      transition: background-color 0.3s ease, transform 0.2s ease;
-    }
-
-    button:hover {
-      background-color: #6A8291;
-      transform: translateY(-1px);
-    }
-
-    button:active {
-      transform: translateY(0);
-    }
-
-    .preview-card {
-      display: none;
-      background: #ffffffd9;
-      border: 1px solid #E0E0E0;
-      border-radius: 10px;
-      padding: 20px;
-      text-align: left;
-      margin-top: 15px;
-    }
-
-    .preview-card h3 {
-      margin-top: 0;
-      color: #333;
-    }
-
-    .preview-card p {
-      margin: 8px 0;
-      color: #444;
-      font-size: 1em;
-    }
-
-    .btn-group {
-      display: flex;
-      gap: 10px;
-      margin-top: 15px;
-    }
-
-    .btn-edit {
-      background-color: #f0ad4e;
-    }
-
-    .btn-resend {
-      background-color: #5cb85c;
-    }
-
-    .btn-edit:hover {
-      background-color: #e39c41;
-    }
-
-    .btn-resend:hover {
-      background-color: #4cae4c;
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Catatan Penjualan Modern & Soft</title>
+<style>
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0; padding: 30px; min-height: 100vh;
+    display: flex; justify-content: center; align-items: center;
+    background-image: url('background.jpg');
+    background-size: cover; background-position: center;
+    background-repeat: no-repeat; background-color: rgba(247,249,252,0.85);
+    background-blend-mode: lighten;
+  }
+  .card-container {
+    background-color: rgba(255,255,255,0.92); padding: 40px;
+    border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+    max-width: 450px; width: 100%; border: 1px solid #EDEDED;
+    text-align: center; backdrop-filter: blur(6px); transition: all 0.3s ease;
+  }
+  .logo { width:100px; height:100px; object-fit:contain; margin-bottom:5px; }
+  h2 { color:#333; margin:0 0 20px 0; font-weight:600; line-height:1.2; }
+  label { display:block; text-align:left; margin-bottom:6px; font-weight:500; color:#555; font-size:0.95em; }
+  input[type="date"], input[type="text"] {
+    width:100%; padding:12px; margin-bottom:25px; border:1px solid #D1D9E6;
+    border-radius:8px; box-sizing:border-box; font-size:1em; color:#333;
+    transition:border-color 0.3s; background-color:#fff;
+  }
+  input:focus { border-color:#A8DADC; outline:none; box-shadow:0 0 0 2px rgba(168,218,220,0.4); }
+  .rupiah-input-group { position:relative; }
+  .rupiah-prefix { position:absolute; left:12px; top:50%; transform:translateY(-50%);
+    color:#555; font-weight:600; pointer-events:none; font-size:1em; letter-spacing:0.5px; }
+  input#nominal { padding-left:40px; }
+  button {
+    background-color:#7E97A6; color:white; padding:12px 20px; border:none;
+    border-radius:8px; cursor:pointer; width:100%; font-size:1.05em;
+    font-weight:600; letter-spacing:0.5px; transition:background-color 0.3s ease, transform 0.2s ease;
+  }
+  button:hover { background-color:#6A8291; transform:translateY(-1px); }
+  button:active { transform:translateY(0); }
+  .preview-card { display:none; background:#ffffffd9; border:1px solid #E0E0E0;
+    border-radius:10px; padding:20px; text-align:left; margin-top:15px; }
+  .preview-card h3 { margin-top:0; color:#333; }
+  .preview-card p { margin:8px 0; color:#444; font-size:1em; }
+  .btn-group { display:flex; gap:10px; margin-top:15px; }
+  .btn-edit { background-color:#f0ad4e; }
+  .btn-resend { background-color:#5cb85c; }
+  .btn-edit:hover { background-color:#e39c41; }
+  .btn-resend:hover { background-color:#4cae4c; }
+</style>
 </head>
 <body>
 
@@ -200,137 +87,109 @@
 </div>
 
 <script type="module">
-  // Firebase import
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-app.js";
-  import { 
-    getFirestore, doc, setDoc, collection, addDoc, getDoc, updateDoc 
-  } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-firestore.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-app.js";
+import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-firestore.js";
 
-  // Konfigurasi Firebase
-  const firebaseConfig = {
-    apiKey: "AIzaSyAv2KN1pHrUPTMaNL2bXF39NI8S2iN2TWw",
-    authDomain: "estehtime.firebaseapp.com",
-    projectId: "estehtime",
-    storageBucket: "estehtime.firebasestorage.app",
-    messagingSenderId: "185336920733",
-    appId: "1:185336920733:web:b0d09bdc8724ac80763274"
-  };
+// Konfigurasi Firebase
+const firebaseConfig = {
+  apiKey: "AIzaSyAv2KN1pHrUPTMaNL2bXF39NI8S2iN2TWw",
+  authDomain: "estehtime.firebaseapp.com",
+  projectId: "estehtime",
+  storageBucket: "estehtime.firebasestorage.app",
+  messagingSenderId: "185336920733",
+  appId: "1:185336920733:web:b0d09bdc8724ac80763274"
+};
 
-  // Inisialisasi Firebase
-  const app = initializeApp(firebaseConfig);
-  const db = getFirestore(app);
+// Inisialisasi Firebase
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
 
-  // Elemen HTML
-  const form = document.getElementById('sales-form');
-  const tanggalInput = document.getElementById('tanggal');
-  const nominalInput = document.getElementById('nominal');
-  const previewCard = document.getElementById('preview-card');
-  const previewTanggal = document.getElementById('preview-tanggal');
-  const previewNominal = document.getElementById('preview-nominal');
-  const btnEdit = document.getElementById('btn-edit');
-  const btnResend = document.getElementById('btn-resend');
+const form = document.getElementById('sales-form');
+const tanggalInput = document.getElementById('tanggal');
+const nominalInput = document.getElementById('nominal');
+const previewCard = document.getElementById('preview-card');
+const previewTanggal = document.getElementById('preview-tanggal');
+const previewNominal = document.getElementById('preview-nominal');
+const btnEdit = document.getElementById('btn-edit');
+const btnResend = document.getElementById('btn-resend');
 
-  // Ambil tanggal hari ini (format YYYY-MM-DD)
-  const tanggalHariIni = new Date().toISOString().split('T')[0];
-  tanggalInput.value = tanggalHariIni;
+// Ambil tanggal hari ini
+const tanggalHariIni = new Date().toISOString().split('T')[0];
+tanggalInput.value = tanggalHariIni;
 
-  // Ambil data lokal terakhir
-  let docIdTerakhir = localStorage.getItem('dataTerakhirId');
-  let tanggalTerakhir = localStorage.getItem('tanggalTerakhir');
+// Format input nominal otomatis
+nominalInput.addEventListener('input', () => {
+  let value = nominalInput.value.replace(/\D/g,'');
+  nominalInput.value = value ? new Intl.NumberFormat('id-ID').format(value) : '';
+});
 
-  // Reset otomatis jika tanggal sudah berganti
-  if (tanggalTerakhir !== tanggalHariIni) {
-    localStorage.removeItem('dataTerakhirId');
-    localStorage.removeItem('tanggalTerakhir');
-    docIdTerakhir = null;
-    tanggalTerakhir = null;
-  }
-
-  // Format angka jadi ribuan otomatis (50.000)
-  nominalInput.addEventListener('input', () => {
-    let value = nominalInput.value.replace(/\D/g, '');
-    nominalInput.value = value ? new Intl.NumberFormat('id-ID').format(value) : '';
-  });
-
-  // Saat halaman dimuat, cek apakah ada data hari ini
-  window.addEventListener('load', async () => {
-    if (docIdTerakhir && tanggalTerakhir === tanggalHariIni) {
-      try {
-        const docRef = doc(db, "penjualan", tanggalHariIni, "data", docIdTerakhir);
-        const snap = await getDoc(docRef);
-        if (snap.exists()) {
-          const data = snap.data();
-          previewTanggal.textContent = data.tanggal;
-          previewNominal.textContent = "Rp " + data.nominal;
-          previewCard.style.display = 'block';
-          form.style.display = 'none';
-        }
-      } catch (err) {
-        console.error("Gagal memuat data terakhir:", err);
-      }
-    }
-  });
-
-  // Simpan data ke Firestore
-  form.addEventListener('submit', async (e) => {
-    e.preventDefault();
-
-    const tanggal = tanggalInput.value;
-    const nominal = nominalInput.value;
-
-    if (!tanggal || !nominal) return alert("Isi semua kolom dulu!");
-
-    try {
-      // Pastikan dokumen tanggal hari ini sudah ada
-      const tanggalDocRef = doc(db, "penjualan", tanggal);
-      await setDoc(tanggalDocRef, { dibuat: new Date() }, { merge: true });
-
-      // Tambahkan catatan ke subkoleksi "data"
-      const newData = await addDoc(collection(db, "penjualan", tanggal, "data"), {
-        tanggal,
-        nominal,
-        timestamp: new Date()
-      });
-
-      // Simpan ke localStorage agar bisa dilanjutkan hari ini
-      localStorage.setItem('dataTerakhirId', newData.id);
-      localStorage.setItem('tanggalTerakhir', tanggal);
-
-      // Tampilkan preview
-      previewTanggal.textContent = tanggal;
-      previewNominal.textContent = "Rp " + nominal;
+// Load data hari ini jika sudah ada
+window.addEventListener('load', async () => {
+  try {
+    const docRef = doc(db, "penjualan", tanggalHariIni);
+    const snap = await getDoc(docRef);
+    if (snap.exists()) {
+      const data = snap.data();
+      previewTanggal.textContent = data.tanggal || tanggalHariIni;
+      previewNominal.textContent = "Rp " + new Intl.NumberFormat('id-ID').format(data.nominal || 0);
       previewCard.style.display = 'block';
       form.style.display = 'none';
-
-      alert("✅ Data berhasil disimpan di Firestore!");
-    } catch (err) {
-      alert("❌ Gagal menyimpan data: " + err.message);
     }
-  });
+  } catch (err) {
+    console.error("Gagal memuat data:", err);
+  }
+});
 
-  // Tombol Edit → kembali ke form
-  btnEdit.addEventListener('click', () => {
-    form.style.display = 'block';
-    previewCard.style.display = 'none';
-  });
+// Submit form → simpan/update data tanggal
+form.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const tanggal = tanggalInput.value;
+  const nominal = parseInt(nominalInput.value.replace(/\D/g,''));
+  if (!tanggal || !nominal) return alert("Isi semua kolom dulu!");
 
-  // Tombol Kirim Ulang → update Firestore
-  btnResend.addEventListener('click', async () => {
-    if (!docIdTerakhir) return alert("Tidak ada data untuk diperbarui!");
+  try {
+    await setDoc(doc(db, "penjualan", tanggal), {
+      tanggal,
+      nominal,
+      updatedAt: new Date()
+    }, { merge: true });
 
-    const tanggal = previewTanggal.textContent;
-    const nominal = previewNominal.textContent.replace(/[^\d]/g, '');
+    previewTanggal.textContent = tanggal;
+    previewNominal.textContent = "Rp " + new Intl.NumberFormat('id-ID').format(nominal);
+    previewCard.style.display = 'block';
+    form.style.display = 'none';
 
-    try {
-      const docRef = doc(db, "penjualan", tanggal, "data", docIdTerakhir);
-      await updateDoc(docRef, {
-        nominal,
-        updatedAt: new Date()
-      });
-      alert("✅ Data berhasil diperbarui di Firestore!");
-    } catch (err) {
-      alert("❌ Gagal memperbarui data: " + err.message);
-    }
-  });
-    </script>
-  
+    alert("✅ Data berhasil disimpan di Firestore!");
+  } catch (err) {
+    alert("❌ Gagal menyimpan data: " + err.message);
+  }
+});
+
+// Edit → kembali ke form
+btnEdit.addEventListener('click', () => {
+  form.style.display = 'block';
+  previewCard.style.display = 'none';
+});
+
+// Kirim Ulang → update data Firestore
+btnResend.addEventListener('click', async () => {
+  const tanggal = previewTanggal.textContent;
+  const nominal = parseInt(nominalInput.value.replace(/\D/g,''));
+  if (!nominal) return alert("Isi nominal baru dulu!");
+
+  try {
+    await setDoc(doc(db, "penjualan", tanggal), {
+      tanggal,
+      nominal,
+      updatedAt: new Date()
+    }, { merge: true });
+
+    previewNominal.textContent = "Rp " + new Intl.NumberFormat('id-ID').format(nominal);
+    alert("✅ Data berhasil diperbarui di Firestore!");
+  } catch (err) {
+    alert("❌ Gagal memperbarui data: " + err.message);
+  }
+});
+</script>
+</body>
+</html>
