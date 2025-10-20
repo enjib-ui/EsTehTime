@@ -15,7 +15,7 @@
   tfoot td { font-weight:bold; background:#e2e2e2; }
   .btn-clear, .btn-delete, .btn-pdf { display:block; padding:5px 10px; border:none;
                border-radius:5px; cursor:pointer; font-weight:bold; transition:0.3s; }
-  .btn-clear { background-color:#e74c3c; color:white; margin:10px auto; }
+  .btn-clear { background-color:#e74c3c; color:white; margin:20px auto; }
   .btn-clear:hover { background-color:#c0392b; }
   .btn-delete { background-color:#e74c3c; color:white; }
   .btn-delete:hover { background-color:#c0392b; }
@@ -70,7 +70,14 @@ const db = getFirestore(app);
 const tbody = document.querySelector('#dataTable tbody');
 const totalNominalEl = document.getElementById('totalNominal');
 
-let penjualanData = []; // array untuk PDF
+let penjualanData = [];
+
+function parseNominal(value) {
+  if (typeof value === 'number') return value;
+  if (!value) return 0;
+  const num = parseFloat(value.toString().replace(/[^0-9]/g, ''));
+  return isNaN(num) ? 0 : num;
+}
 
 async function loadData() {
   tbody.innerHTML = '<tr><td colspan="4">Memuat data...</td></tr>';
@@ -89,14 +96,12 @@ async function loadData() {
     let index = 1;
     let total = 0;
 
-    snapshot.forEach((docSnap) => {
+    snapshot.forEach(docSnap => {
       const data = docSnap.data();
       const tanggal = data.tanggal || docSnap.id;
-      const nominal = Number(data.nominal) || 0;
+      const nominal = parseNominal(data.nominal);
 
       total += nominal;
-
-      penjualanData.push([index, tanggal, nominal.toLocaleString('id-ID')]);
 
       const row = document.createElement('tr');
       row.innerHTML = `
@@ -107,7 +112,6 @@ async function loadData() {
       `;
       tbody.appendChild(row);
 
-      // Hapus per row
       row.querySelector('.btn-delete').addEventListener('click', async () => {
         if (!confirm(`Hapus data tanggal ${tanggal}?`)) return;
         try {
@@ -120,6 +124,7 @@ async function loadData() {
         }
       });
 
+      penjualanData.push([index, tanggal, `Rp ${nominal.toLocaleString('id-ID')}`]);
       index++;
     });
 
@@ -131,7 +136,7 @@ async function loadData() {
   }
 }
 
-// Tombol hapus semua data
+// Hapus semua data
 document.getElementById('clearData').addEventListener('click', async () => {
   if (!confirm('Yakin ingin menghapus semua data?')) return;
   try {
@@ -146,7 +151,7 @@ document.getElementById('clearData').addEventListener('click', async () => {
   }
 });
 
-// Tombol ekspor PDF
+// Ekspor PDF multi-halaman
 document.getElementById('exportPDF').addEventListener('click', () => {
   if (!penjualanData.length) return alert("Tidak ada data untuk diekspor!");
 
@@ -168,6 +173,16 @@ document.getElementById('exportPDF').addEventListener('click', () => {
     styles: { fontSize: 10 },
     headStyles: { fillColor: [126,151,166] },
     footStyles: { fillColor: [226,226,226] },
+    didDrawPage: (data) => {
+      // Header di setiap halaman
+      if (data.pageNumber > 1) {
+        doc.setFontSize(16);
+        doc.text("Data Penjualan Es Teh Time", 40, 40);
+        doc.setFontSize(10);
+        doc.text("Tanggal Cetak: " + now.toLocaleDateString('id-ID'), 40, 55);
+      }
+    },
+    margin: { top: 70 }
   });
 
   doc.save('Data_Penjualan.pdf');
