@@ -5,22 +5,19 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Data Penjualan</title>
 <style>
-  body { font-family:'Segoe UI',sans-serif; background:#f4f7fa; margin:0; padding:20px; }
-  h2 { text-align:center; color:#333; }
-  table { width:100%; border-collapse:collapse; margin-top:20px; background:#fff;
-          border-radius:10px; overflow:hidden; box-shadow:0 3px 20px rgba(0,0,0,0.05); }
-  th, td { border:1px solid #ddd; padding:12px 15px; text-align:center; }
-  th { background-color:#7E97A6; color:white; }
-  tr:nth-child(even) { background-color:#f9f9f9; }
-  tfoot td { font-weight:bold; background:#e2e2e2; }
-  .btn-clear, .btn-pdf { display:block; margin:10px auto; padding:10px 20px; border:none;
-               color:white; border-radius:8px; cursor:pointer; font-weight:bold; transition:0.3s; }
-  .btn-clear { background-color:#e74c3c; }
-  .btn-clear:hover { background-color:#c0392b; }
-  .btn-pdf { background-color:#3498db; }
-  .btn-pdf:hover { background-color:#2980b9; }
-  a.back { display:inline-block; margin-top:10px; color:#0077cc; text-decoration:none; font-size:0.9em; }
-  a.back:hover { text-decoration:underline; }
+  body { font-family:'Segoe UI',sans-serif; background:#f4f7fa; margin:0; padding:20px; }
+  h2 { text-align:center; color:#333; }
+  table { width:100%; border-collapse:collapse; margin-top:20px; background:#fff;
+          border-radius:10px; overflow:hidden; box-shadow:0 3px 20px rgba(0,0,0,0.05); }
+  th, td { border:1px solid #ddd; padding:12px 15px; text-align:center; }
+  th { background-color:#7E97A6; color:white; }
+  tr:nth-child(even) { background-color:#f9f9f9; }
+  tfoot td { font-weight:bold; background:#e2e2e2; }
+  .btn-clear { display:block; margin:20px auto; padding:10px 20px; border:none;
+               background-color:#e74c3c; color:white; border-radius:8px; cursor:pointer; font-weight:bold; transition:0.3s; }
+  .btn-clear:hover { background-color:#c0392b; }
+  a.back { display:inline-block; margin-top:10px; color:#0077cc; text-decoration:none; font-size:0.9em; }
+  a.back:hover { text-decoration:underline; }
 </style>
 </head>
 <body>
@@ -28,38 +25,37 @@
 <h2>Data Penjualan Es Teh Time</h2>
 
 <table id="dataTable">
-  <thead>
-    <tr>
-      <th>No</th>
-      <th>Tanggal</th>
-      <th>Nominal (Rp)</th>
-    </tr>
-  </thead>
-  <tbody></tbody>
-  <tfoot>
-    <tr>
-      <td colspan="2">Total</td>
-      <td id="totalNominal">Rp 0</td>
-    </tr>
-  </tfoot>
+  <thead>
+    <tr>
+      <th>No</th>
+      <th>Tanggal</th>
+      <th>Nominal (Rp)</th>
+    </tr>
+  </thead>
+  <tbody></tbody>
+  <tfoot>
+    <tr>
+      <td colspan="2">Total</td>
+      <td id="totalNominal">Rp 0</td>
+    </tr>
+  </tfoot>
 </table>
-
-<button class="btn-clear" id="clearData">Hapus Semua Data</button>
 <button class="btn-pdf" id="exportPDF">Ekspor ke PDF</button>
+<button class="btn-clear" id="clearData">Hapus Semua Data</button>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-app.js";
 import { getFirestore, collection, getDocs, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-firestore.js";
 import jsPDF from "https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js";
 import "https://cdn.jsdelivr.net/npm/jspdf-autotable@3.5.28/dist/jspdf.plugin.autotable.js";
-
+  
 const firebaseConfig = {
-  apiKey: "AIzaSyAv2KN1pHrUPTMaNL2bXF39NI8S2iN2TWw",
-  authDomain: "estehtime.firebaseapp.com",
-  projectId: "estehtime",
-  storageBucket: "estehtime.firebasestorage.app",
-  messagingSenderId: "185336920733",
-  appId: "1:185336920733:web:b0d09bdc8724ac80763274"
+  apiKey: "AIzaSyAv2KN1pHrUPTMaNL2bXF39NI8S2iN2TWw",
+  authDomain: "estehtime.firebaseapp.com",
+  projectId: "estehtime",
+  storageBucket: "estehtime.firebasestorage.app",
+  messagingSenderId: "185336920733",
+  appId: "1:185336920733:web:b0d09bdc8724ac80763274"
 };
 
 const app = initializeApp(firebaseConfig);
@@ -71,60 +67,47 @@ const totalNominalEl = document.getElementById('totalNominal');
 let penjualanData = []; // menyimpan data untuk PDF
 
 async function loadData() {
-  tbody.innerHTML = '<tr><td colspan="3">Memuat data...</td></tr>';
-  totalNominalEl.textContent = 'Rp 0';
-  penjualanData = [];
+  tbody.innerHTML = '<tr><td colspan="3">Memuat data...</td></tr>';
+  totalNominalEl.textContent = 'Rp 0';
 
-  try {
-    const snapshot = await getDocs(collection(db, "penjualan"));
-    tbody.innerHTML = '';
+  try {
+    const snapshot = await getDocs(collection(db, "penjualan"));
+    tbody.innerHTML = '';
 
-    if (snapshot.empty) {
-      tbody.innerHTML = '<tr><td colspan="3">Belum ada data tersimpan.</td></tr>';
-      return;
-    }
+    if (snapshot.empty) {
+      tbody.innerHTML = '<tr><td colspan="3">Belum ada data tersimpan.</td></tr>';
+      return;
+    }
 
-    let index = 1;
-    let total = 0;
+    let index = 1;
+    let total = 0;
 
-    snapshot.forEach((docSnap) => {
-      const data = docSnap.data();
-      const tanggal = data.tanggal || docSnap.id;
-      const nominal = Number(data.nominal) || 0;
+    snapshot.forEach((docSnap) => {
+      const data = docSnap.data();
+      const tanggal = data.tanggal || docSnap.id;
+      const nominal = Number(data.nominal) || 0;
 
-      total += nominal;
+      total += nominal;
+      
       penjualanData.push([index, tanggal, `Rp ${nominal.toLocaleString('id-ID')}`]);
+    
+      const row = document.createElement('tr');
+      row.innerHTML = `
+        <td>${index++}</td>
+        <td>${tanggal}</td>
+        <td>Rp ${nominal.toLocaleString('id-ID')}</td>
+      `;
+      tbody.appendChild(row);
+    });
 
-      const row = document.createElement('tr');
-      row.innerHTML = `
-        <td>${index++}</td>
-        <td>${tanggal}</td>
-        <td>Rp ${nominal.toLocaleString('id-ID')}</td>
-      `;
-      tbody.appendChild(row);
-    });
+    // Tampilkan total
+    totalNominalEl.textContent = 'Rp ' + total.toLocaleString('id-ID');
 
-    totalNominalEl.textContent = 'Rp ' + total.toLocaleString('id-ID');
-
-  } catch (err) {
-    tbody.innerHTML = `<tr><td colspan="3">Gagal memuat data: ${err.message}</td></tr>`;
-    console.error(err);
-  }
+  } catch (err) {
+    tbody.innerHTML = `<tr><td colspan="3">Gagal memuat data: ${err.message}</td></tr>`;
+    console.error(err);
+  }
 }
-
-document.getElementById('clearData').addEventListener('click', async () => {
-  if (!confirm('Yakin ingin menghapus semua data?')) return;
-  try {
-    const snapshot = await getDocs(collection(db, "penjualan"));
-    const deletePromises = snapshot.docs.map(d => deleteDoc(doc(db, "penjualan", d.id)));
-    await Promise.all(deletePromises);
-    alert("✅ Semua data berhasil dihapus!");
-    loadData();
-  } catch (err) {
-    alert("❌ Gagal menghapus data: " + err.message);
-    console.error(err);
-  }
-});
 
 document.getElementById('exportPDF').addEventListener('click', () => {
   if (!penjualanData.length) return alert("Tidak ada data untuk diekspor!");
@@ -150,6 +133,20 @@ document.getElementById('exportPDF').addEventListener('click', () => {
   });
 
   doc.save('Data_Penjualan.pdf');
+});
+    
+document.getElementById('clearData').addEventListener('click', async () => {
+  if (!confirm('Yakin ingin menghapus semua data?')) return;
+  try {
+    const snapshot = await getDocs(collection(db, "penjualan"));
+    const deletePromises = snapshot.docs.map(d => deleteDoc(doc(db, "penjualan", d.id)));
+    await Promise.all(deletePromises);
+    alert("✅ Semua data berhasil dihapus!");
+    loadData();
+  } catch (err) {
+    alert("❌ Gagal menghapus data: " + err.message);
+    console.error(err);
+  }
 });
 
 loadData();
