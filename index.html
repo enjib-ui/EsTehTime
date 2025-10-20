@@ -200,11 +200,13 @@
 </div>
 
 <script type="module">
-  // ✅ Import Firebase SDK
+  // Firebase import
   import { initializeApp } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-app.js";
-  import { getFirestore, collection, addDoc, doc, updateDoc, getDoc } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-firestore.js";
+  import { 
+    getFirestore, doc, setDoc, collection, addDoc, getDoc, updateDoc 
+  } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-firestore.js";
 
-  // ✅ Konfigurasi Firebase kamu
+  // Konfigurasi Firebase
   const firebaseConfig = {
     apiKey: "AIzaSyAv2KN1pHrUPTMaNL2bXF39NI8S2iN2TWw",
     authDomain: "estehtime.firebaseapp.com",
@@ -214,11 +216,11 @@
     appId: "1:185336920733:web:b0d09bdc8724ac80763274"
   };
 
-  // ✅ Inisialisasi Firebase
+  // Inisialisasi Firebase
   const app = initializeApp(firebaseConfig);
   const db = getFirestore(app);
 
-  // 🧾 Elemen DOM
+  // Elemen HTML
   const form = document.getElementById('sales-form');
   const tanggalInput = document.getElementById('tanggal');
   const nominalInput = document.getElementById('nominal');
@@ -228,19 +230,33 @@
   const btnEdit = document.getElementById('btn-edit');
   const btnResend = document.getElementById('btn-resend');
 
-  let docIdTerakhir = localStorage.getItem('dataTerakhirId'); // 🔁 ambil dari localStorage jika ada
+  // Ambil tanggal hari ini (format YYYY-MM-DD)
+  const tanggalHariIni = new Date().toISOString().split('T')[0];
+  tanggalInput.value = tanggalHariIni;
 
-  // 💰 Format nominal otomatis
+  // Ambil data lokal terakhir
+  let docIdTerakhir = localStorage.getItem('dataTerakhirId');
+  let tanggalTerakhir = localStorage.getItem('tanggalTerakhir');
+
+  // Reset otomatis jika tanggal sudah berganti
+  if (tanggalTerakhir !== tanggalHariIni) {
+    localStorage.removeItem('dataTerakhirId');
+    localStorage.removeItem('tanggalTerakhir');
+    docIdTerakhir = null;
+    tanggalTerakhir = null;
+  }
+
+  // Format angka jadi ribuan otomatis (50.000)
   nominalInput.addEventListener('input', () => {
     let value = nominalInput.value.replace(/\D/g, '');
     nominalInput.value = value ? new Intl.NumberFormat('id-ID').format(value) : '';
   });
 
-  // 🔁 Saat halaman di-refresh → tampilkan data terakhir dari Firestore
+  // Saat halaman dimuat, cek apakah ada data hari ini
   window.addEventListener('load', async () => {
-    if (docIdTerakhir) {
+    if (docIdTerakhir && tanggalTerakhir === tanggalHariIni) {
       try {
-        const docRef = doc(db, "penjualan", docIdTerakhir);
+        const docRef = doc(db, "penjualan", tanggalHariIni, "data", docIdTerakhir);
         const snap = await getDoc(docRef);
         if (snap.exists()) {
           const data = snap.data();
@@ -255,41 +271,50 @@
     }
   });
 
-  // 📝 Simpan data baru ke Firestore
+  // Simpan data ke Firestore
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
+
     const tanggal = tanggalInput.value;
     const nominal = nominalInput.value;
 
     if (!tanggal || !nominal) return alert("Isi semua kolom dulu!");
 
     try {
-      const docRef = await addDoc(collection(db, "penjualan"), {
+      // Pastikan dokumen tanggal hari ini sudah ada
+      const tanggalDocRef = doc(db, "penjualan", tanggal);
+      await setDoc(tanggalDocRef, { dibuat: new Date() }, { merge: true });
+
+      // Tambahkan catatan ke subkoleksi "data"
+      const newData = await addDoc(collection(db, "penjualan", tanggal, "data"), {
         tanggal,
         nominal,
         timestamp: new Date()
       });
-      docIdTerakhir = docRef.id;
-      localStorage.setItem('dataTerakhirId', docRef.id);
 
+      // Simpan ke localStorage agar bisa dilanjutkan hari ini
+      localStorage.setItem('dataTerakhirId', newData.id);
+      localStorage.setItem('tanggalTerakhir', tanggal);
+
+      // Tampilkan preview
       previewTanggal.textContent = tanggal;
       previewNominal.textContent = "Rp " + nominal;
       previewCard.style.display = 'block';
       form.style.display = 'none';
 
-      alert("✅ Data tersimpan di Firestore!");
+      alert("✅ Data berhasil disimpan di Firestore!");
     } catch (err) {
       alert("❌ Gagal menyimpan data: " + err.message);
     }
   });
 
-  // ✏️ Tombol Edit → kembali ke form
+  // Tombol Edit → kembali ke form
   btnEdit.addEventListener('click', () => {
     form.style.display = 'block';
     previewCard.style.display = 'none';
   });
 
-  // 🔄 Tombol Kirim Ulang → update data Firestore
+  // Tombol Kirim Ulang → update Firestore
   btnResend.addEventListener('click', async () => {
     if (!docIdTerakhir) return alert("Tidak ada data untuk diperbarui!");
 
@@ -297,8 +322,8 @@
     const nominal = previewNominal.textContent.replace(/[^\d]/g, '');
 
     try {
-      await updateDoc(doc(db, "penjualan", docIdTerakhir), {
-        tanggal,
+      const docRef = doc(db, "penjualan", tanggal, "data", docIdTerakhir);
+      await updateDoc(docRef, {
         nominal,
         updatedAt: new Date()
       });
@@ -307,5 +332,5 @@
       alert("❌ Gagal memperbarui data: " + err.message);
     }
   });
-</script>
+    </script>
   
