@@ -166,7 +166,7 @@ async function loadData(filterBulan = null, filterTahun = null) {
       const nominal = parseNominal(data.nominal);
       // --- FILTER PER BULAN ---
   if (filterBulan && filterTahun) {
-    const [day, month, year] = tanggal.split(/[\/\-]/); // sesuaikan format tanggal kamu
+    const [year, month, day] = tanggal.split(/[\/\-]/); // sesuaikan format tanggal kamu
     if (month !== filterBulan || year !== filterTahun) return;
   }
 
