@@ -224,7 +224,7 @@ document.getElementById('clearData').addEventListener('click', async () => {
 // Ekspor PDF
 document.getElementById('exportPDF').addEventListener('click', () => {
   if (!penjualanData.length) return alert("Tidak ada data untuk diekspor!");
-  const { jsPDF } = window.jspdf; // ✅ ambil dari global window
+  const { jsPDF } = window.jspdf;
   const doc = new jsPDF('p', 'pt');
 
   doc.setFontSize(16);
@@ -241,7 +241,14 @@ document.getElementById('exportPDF').addEventListener('click', () => {
     theme: 'grid',
     styles: { fontSize: 10 },
     headStyles: { fillColor: [126,151,166] },
-    footStyles: { fillColor: [226,226,226] },
+
+    // 🟥 styling khusus footer total
+    footStyles: {
+      fillColor: [226, 226, 226],   // background abu-abu
+      textColor: [255, 0, 0],       // teks merah
+      fontStyle: 'bold'            // tebal biar menonjol
+    },
+
     didDrawPage: (data) => {
       if (data.pageNumber > 1) {
         doc.setFontSize(16);
@@ -255,6 +262,7 @@ document.getElementById('exportPDF').addEventListener('click', () => {
 
   doc.save('Data_Penjualan.pdf');
 });
+  
   document.getElementById('filterBtn').addEventListener('click', () => {
   const bulan = document.getElementById('bulan').value;
   const tahun = document.getElementById('tahun').value;
