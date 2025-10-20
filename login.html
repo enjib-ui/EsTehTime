@@ -14,23 +14,18 @@
 
     body {
       min-height: 100vh;
-      background: url('bg.jpg') center/cover no-repeat;
+      background-color: #ffc9d6; /* pink pastel */
       display: flex;
       justify-content: center;
       align-items: center;
     }
 
     .login-container {
-      background: rgba(255, 182, 193, 0.15); /* soft pink transparan */
-      backdrop-filter: blur(12px);
-      padding: 35px 25px;
-      border-radius: 20px;
-      width: 100%;
-      max-width: 380px;
-      box-shadow: 0 8px 20px rgba(255, 182, 193, 0.4);
+      background: none;
       text-align: center;
-      border: 1px solid rgba(255, 192, 203, 0.3);
-      animation: zoomIn 0.8s ease; /* ✨ efek zoom saat muncul */
+      animation: zoomIn 0.8s ease;
+      width: 100%;
+      max-width: 400px;
     }
 
     @keyframes zoomIn {
@@ -38,50 +33,70 @@
       100% { transform: scale(1); opacity: 1; }
     }
 
-    .login-container h2 {
-      color: #fff;
-      font-size: 1.8em;
-      font-weight: 600;
-      margin-bottom: 20px;
+    .login-title {
+      font-size: 2.5em;
+      font-weight: 700;
+      margin-bottom: 30px;
+      color: #444;
       letter-spacing: 1px;
     }
 
+    /* Warna pelangi lembut pada tulisan Log-In */
+    .login-title span:nth-child(1) { color: #c9f2c7; }
+    .login-title span:nth-child(2) { color: #f7b2bd; }
+    .login-title span:nth-child(3) { color: #b5d8f7; }
+    .login-title span:nth-child(4) { color: #f7e7b2; }
+    .login-title span:nth-child(5) { color: #f2c5f7; }
+    .login-title span:nth-child(6) { color: #f7b2d9; }
+
     .input-group {
       position: relative;
-      margin-bottom: 20px;
+      margin-bottom: 18px;
     }
 
     .input-group input {
       width: 100%;
-      padding: 12px 14px;
-      border: none;
-      outline: none;
-      border-radius: 10px;
+      padding: 14px 45px;
+      border: 2px solid #222;
+      border-radius: 50px;
       font-size: 1em;
-      background: rgba(255, 255, 255, 0.85);
-      transition: box-shadow 0.3s ease;
+      background: #e8f7e4;
+      outline: none;
+      transition: 0.3s;
     }
 
     .input-group input:focus {
-      box-shadow: 0 0 0 3px rgba(255, 192, 203, 0.6);
+      border-color: #444;
+      box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.3);
+    }
+
+    .input-group .icon {
+      position: absolute;
+      left: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 1.2em;
+      color: #444;
     }
 
     .login-btn {
-      width: 100%;
-      padding: 13px;
-      background: linear-gradient(to right, #ffb6c1, #ff91a4);
-      color: white;
-      font-size: 1em;
-      font-weight: 600;
-      border: none;
-      border-radius: 10px;
+      width: 60px;
+      height: 45px;
+      background: #f7b2bd;
+      border: 2px solid #222;
+      border-radius: 50px;
+      font-size: 1.2em;
       cursor: pointer;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 20px auto 0;
       transition: transform 0.2s ease, box-shadow 0.2s ease;
     }
 
     .login-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 15px rgba(255, 145, 164, 0.4);
+      transform: scale(1.05);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
     }
 
     .error-msg {
@@ -94,17 +109,7 @@
       display: none;
     }
 
-    /* ✨ Animasi saat error muncul */
-    .fade-in {
-      animation: fadeIn 0.4s ease forwards;
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(-5px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    /* ✨ Animasi shake saat salah login */
+    /* Animasi shake jika salah login */
     .shake {
       animation: shake 0.4s ease;
     }
@@ -120,14 +125,18 @@
 </head>
 <body>
   <div class="login-container" id="loginBox">
-    <h2>Login Admin 🍓</h2>
-    <div class="input-group">
-      <input type="text" id="username" placeholder="Username" />
+    <div class="login-title">
+      <span>L</span><span>o</span><span>g</span><span>-</span><span>I</span><span>n</span>
     </div>
     <div class="input-group">
+      <span class="icon">👤</span>
+      <input type="text" id="username" placeholder="User Name" />
+    </div>
+    <div class="input-group">
+      <span class="icon">🔒</span>
       <input type="password" id="password" placeholder="Password" />
     </div>
-    <button class="login-btn" onclick="login()">Masuk</button>
+    <button class="login-btn" onclick="login()">➡</button>
     <div class="error-msg" id="errorMsg">Username atau password salah</div>
   </div>
 
@@ -145,9 +154,6 @@
         window.location.href = "data.html";
       } else {
         errorMsg.style.display = "block";
-        errorMsg.classList.add("fade-in");
-
-        // ✨ animasi shake
         loginBox.classList.add("shake");
         setTimeout(() => {
           loginBox.classList.remove("shake");
