@@ -41,7 +41,7 @@
   margin-bottom: 20px;
   flex-wrap: nowrap;          /* ⛔ tidak pindah ke baris baru */
   overflow-x: auto;           /* ✅ geser jika layar kecil */
-  padding: 0 5px;
+  padding: 0 10px;
 }
 
 .filter-container label {
@@ -63,6 +63,8 @@
 @media (max-width: 480px) {
   .filter-container {
     gap: 5px;
+    justify-content: flex-start;   /* ✅ biar mulai dari kiri */
+    padding-left: 12px;
   }
   .filter-container select,
   .filter-container button {
