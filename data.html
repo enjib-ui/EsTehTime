@@ -12,6 +12,7 @@
   th, td { border:1px solid #ddd; padding:12px 15px; text-align:center; }
   th { background-color:#7E97A6; color:white; }
   tr:nth-child(even) { background-color:#f9f9f9; }
+  tfoot td { font-weight:bold; background:#e2e2e2; }
   .btn-clear { display:block; margin:20px auto; padding:10px 20px; border:none;
                background-color:#e74c3c; color:white; border-radius:8px; cursor:pointer; font-weight:bold; transition:0.3s; }
   .btn-clear:hover { background-color:#c0392b; }
@@ -32,6 +33,12 @@
     </tr>
   </thead>
   <tbody></tbody>
+  <tfoot>
+    <tr>
+      <td colspan="2">Total</td>
+      <td id="totalNominal">Rp 0</td>
+    </tr>
+  </tfoot>
 </table>
 
 <button class="btn-clear" id="clearData">Hapus Semua Data</button>
@@ -54,9 +61,11 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
 const tbody = document.querySelector('#dataTable tbody');
+const totalNominalEl = document.getElementById('totalNominal');
 
 async function loadData() {
   tbody.innerHTML = '<tr><td colspan="3">Memuat data...</td></tr>';
+  totalNominalEl.textContent = 'Rp 0';
 
   try {
     const snapshot = await getDocs(collection(db, "penjualan"));
@@ -68,10 +77,14 @@ async function loadData() {
     }
 
     let index = 1;
+    let total = 0;
+
     snapshot.forEach((docSnap) => {
       const data = docSnap.data();
-      const tanggal = data.tanggal || docSnap.id; // fallback ke doc.id
+      const tanggal = data.tanggal || docSnap.id;
       const nominal = Number(data.nominal) || 0;
+
+      total += nominal;
 
       const row = document.createElement('tr');
       row.innerHTML = `
@@ -81,6 +94,10 @@ async function loadData() {
       `;
       tbody.appendChild(row);
     });
+
+    // Tampilkan total
+    totalNominalEl.textContent = 'Rp ' + total.toLocaleString('id-ID');
+
   } catch (err) {
     tbody.innerHTML = `<tr><td colspan="3">Gagal memuat data: ${err.message}</td></tr>`;
     console.error(err);
