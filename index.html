@@ -1,169 +1,167 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Catatan Penjualan Modern & Soft</title>
-    <style>
-        /* === Palet Warna Soft & Background Gambar === */
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            margin: 0;
-            padding: 30px;
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Catatan Penjualan Modern & Soft</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 30px;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-image: url('background.jpg');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-color: rgba(247, 249, 252, 0.85);
+      background-blend-mode: lighten;
+    }
 
-            /* ==== Ganti nama file background di bawah ini ==== */
-            background-image: url('logo.png');
-            /* Contoh: background-image: url('bg_es_teh.png'); */
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
+    .card-container {
+      background-color: rgba(255, 255, 255, 0.92);
+      padding: 40px;
+      border-radius: 16px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+      max-width: 450px;
+      width: 100%;
+      border: 1px solid #EDEDED;
+      text-align: center;
+      backdrop-filter: blur(6px);
+    }
 
-            /* Tambahan lapisan lembut agar teks tetap terbaca */
-            background-color: rgba(247, 249, 252, 0.85);
-            background-blend-mode: lighten;
-        }
+    .logo {
+      width: 100px;
+      height: 100px;
+      object-fit: contain;
+      margin-bottom: 15px;
+    }
 
-        .card-container {
-            background-color: rgba(255, 255, 255, 0.92);
-            padding: 40px;
-            border-radius: 16px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
-            max-width: 450px;
-            width: 100%;
-            border: 1px solid #EDEDED;
-            text-align: center;
-            backdrop-filter: blur(6px); /* Efek kaca lembut */
-        }
+    h2 {
+      color: #333333;
+      margin-bottom: 30px;
+      font-weight: 600;
+    }
 
-        /* === Logo === */
-        .logo {
-            width: 100px;
-            height: 100px;
-            object-fit: contain;
-            margin-bottom: 15px;
-        }
+    label {
+      display: block;
+      text-align: left;
+      margin-bottom: 6px;
+      font-weight: 500;
+      color: #555555;
+      font-size: 0.95em;
+    }
 
-        h2 {
-            color: #333333;
-            margin-bottom: 30px;
-            font-weight: 600;
-        }
+    input[type="date"], input[type="text"] {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 25px;
+      border: 1px solid #D1D9E6;
+      border-radius: 8px;
+      box-sizing: border-box;
+      font-size: 1em;
+      color: #333333;
+      transition: border-color 0.3s;
+      background-color: #FFFFFF;
+    }
 
-        label {
-            display: block;
-            text-align: left;
-            margin-bottom: 6px;
-            font-weight: 500;
-            color: #555555;
-            font-size: 0.95em;
-        }
+    input:focus {
+      border-color: #A8DADC;
+      outline: none;
+      box-shadow: 0 0 0 2px rgba(168, 218, 220, 0.4);
+    }
 
-        input[type="date"], input[type="number"], input[type="file"] {
-            width: 100%;
-            padding: 12px;
-            margin-bottom: 25px;
-            border: 1px solid #D1D9E6;
-            border-radius: 8px;
-            box-sizing: border-box;
-            font-size: 1em;
-            color: #333333;
-            transition: border-color 0.3s;
-            background-color: #FFFFFF;
-        }
+    .rupiah-input-group {
+      position: relative;
+    }
 
-        input:focus {
-            border-color: #A8DADC;
-            outline: none;
-            box-shadow: 0 0 0 2px rgba(168, 218, 220, 0.4);
-        }
+    .rupiah-prefix {
+      position: absolute;
+      left: 12px;
+      top: 47%;
+      transform: translateY(-60%);
+      color: #777;
+      font-weight: 600;
+      pointer-events: none;
+      font-size: 1em;
+      letter-spacing: 0.5px;
+    }
 
-        .rupiah-input-group {
-            position: relative;
-        }
-        .rupiah-prefix {
-            position: absolute;
-            left: 12px;
-            top: 47%;
-            transform: translateY(-60%);
-            color: #999;
-            font-weight: 600;
-            pointer-events: none;
-            font-size: 1em;
-        }
-        input[type="number"] {
-            padding-left: 40px;
-        }
+    input#nominal {
+      padding-left: 40px;
+    }
 
-        button {
-            background-color: #7E97A6;
-            color: white;
-            padding: 12px 20px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            width: 100%;
-            font-size: 1.05em;
-            font-weight: 600;
-            letter-spacing: 0.5px;
-            transition: background-color 0.3s ease, transform 0.2s ease;
-        }
-        button:hover {
-            background-color: #6A8291;
-            transform: translateY(-1px);
-        }
-        button:active {
-            transform: translateY(0);
-        }
+    button {
+      background-color: #7E97A6;
+      color: white;
+      padding: 12px 20px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      width: 100%;
+      font-size: 1.05em;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      transition: background-color 0.3s ease, transform 0.2s ease;
+    }
 
-        /* Preview Gambar Penjualan */
-        .image-preview {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-        .image-preview img {
-            max-width: 100%;
-            border-radius: 10px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-            display: none;
-        }
-    </style>
+    button:hover {
+      background-color: #6A8291;
+      transform: translateY(-1px);
+    }
+
+    button:active {
+      transform: translateY(0);
+    }
+  </style>
 </head>
 <body>
 
 <div class="card-container">
+  <img src="logo.png" alt="Logo Toko" class="logo">
+  <h2>Catatan Penjualan Es Teh Time</h2>
+  
+  <form id="sales-form">
+    <div>
+      <label for="tanggal">🗓️ Tanggal Penjualan:</label>
+      <input type="date" id="tanggal" name="tanggal" required>
+    </div>
 
-    <!-- ==== Ganti nama file logo di bawah ini ==== -->
-    <img src="logo.png" alt="Logo Toko" class="logo">
-    <!-- Contoh lain: <img src="logo_es_teh.png" alt="Logo Toko" class="logo"> -->
+    <div>
+      <label for="nominal">💰 Nominal Penjualan:</label>
+      <div class="rupiah-input-group">
+        <span class="rupiah-prefix">Rp</span>
+        <input type="text" id="nominal" name="nominal" placeholder="Masukkan Nominal Penjualan..." required>
+      </div>
+    </div>
 
-    <h2>Catatan Penjualan Es Teh Time</h2>
-    
-    <form id="sales-form">
-        
-        <div>
-            <label for="tanggal">🗓️ Tanggal Penjualan:</label>
-            <input type="date" id="tanggal" name="tanggal" required>
-        </div>
-        
-        <div>
-            <label for="nominal">💰 Nominal Penjualan:</label>
-            <div class="rupiah-input-group">
-                <span class="rupiah-prefix">Rp</span>
-                <input type="number" id="nominal" name="nominal" min="0" step="1000" placeholder="Masukkan Nominal Penjualan..." required>
-            </div>
-        </div>
-
-        <div class="image-preview">
-            <img id="preview-img" alt="Preview Gambar">
-        </div>
-
-        <button type="submit">Simpan Catatan</button>
-    </form>
+    <button type="submit">Simpan Catatan</button>
+  </form>
 </div>
+
+<script>
+  const nominalInput = document.getElementById('nominal');
+
+  // Format angka ke format ribuan (50.000)
+  nominalInput.addEventListener('input', function(e) {
+    let value = this.value.replace(/\D/g, ''); // hanya angka
+    if (value) {
+      this.value = new Intl.NumberFormat('id-ID').format(value);
+    } else {
+      this.value = '';
+    }
+  });
+
+  // Hapus titik saat dikirim ke backend (jika perlu)
+  document.getElementById('sales-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+    let rawValue = nominalInput.value.replace(/\./g, ''); // hilangkan titik
+    alert("Nominal disimpan: " + rawValue);
+  });
+</script>
 
 </body>
 </html>
