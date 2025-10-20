@@ -151,7 +151,8 @@
       const loginBox = document.getElementById("loginBox");
 
       if (user === USERNAME && pass === PASSWORD) {
-        window.location.href = "data.html";
+  localStorage.setItem("isLoggedIn", "true"); // simpan status login
+  window.location.href = "data.html";
       } else {
         errorMsg.style.display = "block";
         loginBox.classList.add("shake");
@@ -160,6 +161,9 @@
         }, 400);
       }
     }
+    // ✅ Jika sudah login, redirect langsung ke data.html
+if (localStorage.getItem("isLoggedIn") === "true") {
+  window.location.href = "data.html";
   </script>
 </body>
 </html>
