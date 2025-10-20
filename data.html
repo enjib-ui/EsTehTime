@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Data Penjualan</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #f4f7fa;
+      margin: 0;
+      padding: 20px;
+    }
+
+    h2 {
+      text-align: center;
+      color: #333;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+      background: #fff;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 3px 20px rgba(0,0,0,0.05);
+    }
+
+    th, td {
+      border: 1px solid #ddd;
+      padding: 12px 15px;
+      text-align: center;
+    }
+
+    th {
+      background-color: #7E97A6;
+      color: white;
+    }
+
+    tr:nth-child(even) {
+      background-color: #f9f9f9;
+    }
+
+    .btn-clear {
+      display: block;
+      margin: 20px auto;
+      padding: 10px 20px;
+      border: none;
+      background-color: #e74c3c;
+      color: white;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: 0.3s;
+    }
+
+    .btn-clear:hover {
+      background-color: #c0392b;
+    }
+
+    a.back {
+      display: inline-block;
+      margin-top: 10px;
+      color: #0077cc;
+      text-decoration: none;
+      font-size: 0.9em;
+    }
+
+    a.back:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+
+<h2>📊 Data Penjualan Tersimpan</h2>
+
+<table id="dataTable">
+  <thead>
+    <tr>
+      <th>No</th>
+      <th>Tanggal</th>
+      <th>Nominal (Rp)</th>
+    </tr>
+  </thead>
+  <tbody></tbody>
+</table>
+
+<button class="btn-clear" id="clearData">Hapus Semua Data</button>
+<center><a href="index.html" class="back">⬅ Kembali ke Halaman Utama</a></center>
+
+<script>
+  const tbody = document.querySelector('#dataTable tbody');
+  const data = JSON.parse(localStorage.getItem('penjualan')) || [];
+
+  function loadTable() {
+    tbody.innerHTML = '';
+    if (data.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="3">Belum ada data tersimpan.</td></tr>';
+      return;
+    }
+
+    data.forEach((item, index) => {
+      const row = document.createElement('tr');
+      row.innerHTML = `
+        <td>${index + 1}</td>
+        <td>${item.tanggal}</td>
+        <td>Rp ${item.nominal}</td>
+      `;
+      tbody.appendChild(row);
+    });
+  }
+
+  document.getElementById('clearData').addEventListener('click', () => {
+    if (confirm('Yakin ingin menghapus semua data?')) {
+      localStorage.removeItem('penjualan');
+      location.reload();
+    }
+  });
+
+  loadTable();
+</script>
+
+</body>
+</html>
