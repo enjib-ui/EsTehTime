@@ -72,6 +72,7 @@ const totalNominalEl = document.getElementById('totalNominal');
 
 let penjualanData = [];
 
+// Fungsi bantu parse nominal agar selalu angka
 function parseNominal(value) {
   if (typeof value === 'number') return value;
   if (!value) return 0;
@@ -112,6 +113,7 @@ async function loadData() {
       `;
       tbody.appendChild(row);
 
+      // Hapus per row
       row.querySelector('.btn-delete').addEventListener('click', async () => {
         if (!confirm(`Hapus data tanggal ${tanggal}?`)) return;
         try {
@@ -151,10 +153,9 @@ document.getElementById('clearData').addEventListener('click', async () => {
   }
 });
 
-// Ekspor PDF multi-halaman
+// Ekspor PDF
 document.getElementById('exportPDF').addEventListener('click', () => {
   if (!penjualanData.length) return alert("Tidak ada data untuk diekspor!");
-
   const { jsPDF } = window.jspdf;
   const doc = new jsPDF('p','pt');
 
@@ -174,7 +175,6 @@ document.getElementById('exportPDF').addEventListener('click', () => {
     headStyles: { fillColor: [126,151,166] },
     footStyles: { fillColor: [226,226,226] },
     didDrawPage: (data) => {
-      // Header di setiap halaman
       if (data.pageNumber > 1) {
         doc.setFontSize(16);
         doc.text("Data Penjualan Es Teh Time", 40, 40);
