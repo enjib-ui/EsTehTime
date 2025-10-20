@@ -21,6 +21,18 @@
   .btn-delete:hover { background-color:#c0392b; }
   .btn-pdf { background-color:#3498db; color:white; margin:10px auto; }
   .btn-pdf:hover { background-color:#2980b9; }
+  .button-container {
+  display: flex;
+  justify-content: center;
+  gap: 15px;              /* jarak antar tombol */
+  margin-top: 20px;
+}
+
+.button-container button {
+  width: 200px;           /* ukuran tombol sama */
+  padding: 10px 0;
+  font-size: 14px;
+}
 </style>
 </head>
 <body>
@@ -46,8 +58,11 @@
   </tfoot>
 </table>
 
-<button class="btn-pdf" id="exportPDF">Ekspor ke PDF</button>
-<button class="btn-clear" id="clearData">Hapus Semua Data</button>
+<!-- Tombol Aksi -->
+<div class="button-container">
+  <button class="btn-pdf" id="exportPDF">Ekspor ke PDF</button>
+  <button class="btn-clear" id="clearData">Hapus Semua Data</button>
+</div>
 
 <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/jspdf-autotable@3.5.28/dist/jspdf.plugin.autotable.js"></script>
