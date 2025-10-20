@@ -87,22 +87,25 @@ async function loadData() {
     let index = 1;
     let total = 0;
 
-    snapshot.forEach((docSnap) => {
-      const data = docSnap.data();
-      const tanggal = data.tanggal || docSnap.id;
-      const nominal = Number(data.nominal) || 0;
+    for (const docTanggal of snapshot.docs) {
+      const subSnapshot = await getDocs(collection(db, "penjualan", docTanggal.id, "data"));
+      subSnapshot.forEach(docData => {
+        const data = docData.data();
+        const tanggal = data.tanggal || docTanggal.id;
+        const nominal = Number(data.nominal) || 0;
 
-      total += nominal;
-      penjualanData.push([index, tanggal, `Rp ${nominal.toLocaleString('id-ID')}`]);
+        total += nominal;
+        penjualanData.push([index, tanggal, `Rp ${nominal.toLocaleString('id-ID')}`]);
 
-      const row = document.createElement('tr');
-      row.innerHTML = `
-        <td>${index++}</td>
-        <td>${tanggal}</td>
-        <td>Rp ${nominal.toLocaleString('id-ID')}</td>
-      `;
-      tbody.appendChild(row);
-    });
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>${index++}</td>
+          <td>${tanggal}</td>
+          <td>Rp ${nominal.toLocaleString('id-ID')}</td>
+        `;
+        tbody.appendChild(row);
+      });
+    }
 
     totalNominalEl.textContent = 'Rp ' + total.toLocaleString('id-ID');
 
@@ -116,8 +119,13 @@ document.getElementById('clearData').addEventListener('click', async () => {
   if (!confirm('Yakin ingin menghapus semua data?')) return;
   try {
     const snapshot = await getDocs(collection(db, "penjualan"));
-    const deletePromises = snapshot.docs.map(d => deleteDoc(doc(db, "penjualan", d.id)));
-    await Promise.all(deletePromises);
+    for (const docTanggal of snapshot.docs) {
+      const subSnapshot = await getDocs(collection(db, "penjualan", docTanggal.id, "data"));
+      for (const docData of subSnapshot.docs) {
+        await deleteDoc(doc(db, "penjualan", docTanggal.id, "data", docData.id));
+      }
+      await deleteDoc(doc(db, "penjualan", docTanggal.id)); // hapus dokumen tanggal
+    }
     alert("✅ Semua data berhasil dihapus!");
     loadData();
   } catch (err) {
@@ -132,20 +140,16 @@ document.getElementById('exportPDF').addEventListener('click', () => {
   const { jsPDF } = window.jspdf;
   const doc = new jsPDF('p','pt');
 
-  // Tambahkan logo (ganti 'logo.png' sesuai file)
   const img = new Image();
   img.src = 'logo.png';
   img.onload = () => {
     doc.addImage(img, 'PNG', 40, 20, 50, 50);
-
-    // Judul dan tanggal cetak
     doc.setFontSize(16);
     doc.text("Data Penjualan Es Teh Time", 110, 40);
     doc.setFontSize(10);
     const now = new Date();
     doc.text("Tanggal Cetak: " + now.toLocaleDateString('id-ID'), 110, 55);
 
-    // Tabel
     doc.autoTable({
       startY: 80,
       head: [['No', 'Tanggal', 'Nominal (Rp)']],
