@@ -31,19 +31,22 @@
       border: 1px solid #EDEDED;
       text-align: center;
       backdrop-filter: blur(6px);
+      transition: all 0.3s ease;
     }
 
     .logo {
       width: 100px;
       height: 100px;
       object-fit: contain;
-      margin-bottom: 0px;
+      margin-bottom: 5px;
     }
 
     h2 {
       color: #333333;
-      margin-bottom: 30px;
-      font-weight: 500;
+      margin-top: 0;
+      margin-bottom: 20px;
+      font-weight: 600;
+      line-height: 1.2;
     }
 
     label {
@@ -79,16 +82,16 @@
     }
 
     .rupiah-prefix {
-  position: absolute;
-  left: 12px;
-  top: 32%; /* Naik lebih tinggi */
-  transform: translateY(-30%);
-  color: #555;
-  font-weight: 600;
-  pointer-events: none;
-  font-size: 1em;
-  letter-spacing: 0.5px;
-      }
+      position: absolute;
+      left: 12px;
+      top: 32%;
+      transform: translateY(-30%);
+      color: #555;
+      font-weight: 600;
+      pointer-events: none;
+      font-size: 1em;
+      letter-spacing: 0.5px;
+    }
 
     input#nominal {
       padding-left: 40px;
@@ -116,6 +119,50 @@
     button:active {
       transform: translateY(0);
     }
+
+    /* Preview card */
+    .preview-card {
+      display: none;
+      background: #ffffffd9;
+      border: 1px solid #E0E0E0;
+      border-radius: 10px;
+      padding: 20px;
+      text-align: left;
+      margin-top: 15px;
+    }
+
+    .preview-card h3 {
+      margin-top: 0;
+      color: #333;
+    }
+
+    .preview-card p {
+      margin: 8px 0;
+      color: #444;
+      font-size: 1em;
+    }
+
+    .btn-group {
+      display: flex;
+      gap: 10px;
+      margin-top: 15px;
+    }
+
+    .btn-edit {
+      background-color: #f0ad4e;
+    }
+
+    .btn-resend {
+      background-color: #5cb85c;
+    }
+
+    .btn-edit:hover {
+      background-color: #e39c41;
+    }
+
+    .btn-resend:hover {
+      background-color: #4cae4c;
+    }
   </style>
 </head>
 <body>
@@ -140,14 +187,31 @@
 
     <button type="submit">Simpan Catatan</button>
   </form>
+
+  <div class="preview-card" id="preview-card">
+    <h3>📋 Catatan Tersimpan</h3>
+    <p><strong>Tanggal:</strong> <span id="preview-tanggal"></span></p>
+    <p><strong>Nominal:</strong> <span id="preview-nominal"></span></p>
+
+    <div class="btn-group">
+      <button class="btn-edit" id="btn-edit">Edit</button>
+      <button class="btn-resend" id="btn-resend">Kirim Ulang</button>
+    </div>
+  </div>
 </div>
 
 <script>
   const nominalInput = document.getElementById('nominal');
+  const form = document.getElementById('sales-form');
+  const previewCard = document.getElementById('preview-card');
+  const previewTanggal = document.getElementById('preview-tanggal');
+  const previewNominal = document.getElementById('preview-nominal');
+  const btnEdit = document.getElementById('btn-edit');
+  const btnResend = document.getElementById('btn-resend');
 
-  // Format angka ke format ribuan (50.000)
-  nominalInput.addEventListener('input', function(e) {
-    let value = this.value.replace(/\D/g, ''); // hanya angka
+  // Format angka ke format ribuan (contoh: 50.000)
+  nominalInput.addEventListener('input', function() {
+    let value = this.value.replace(/\D/g, '');
     if (value) {
       this.value = new Intl.NumberFormat('id-ID').format(value);
     } else {
@@ -155,11 +219,33 @@
     }
   });
 
-  // Hapus titik saat dikirim ke backend (jika perlu)
-  document.getElementById('sales-form').addEventListener('submit', function(e) {
+  // Ketika form disubmit
+  form.addEventListener('submit', function(e) {
     e.preventDefault();
-    let rawValue = nominalInput.value.replace(/\./g, ''); // hilangkan titik
-    alert("Nominal disimpan: " + rawValue);
+
+    const tanggal = document.getElementById('tanggal').value;
+    const nominal = nominalInput.value;
+
+    if (!tanggal || !nominal) {
+      alert("Mohon lengkapi semua data!");
+      return;
+    }
+
+    previewTanggal.textContent = tanggal;
+    previewNominal.textContent = "Rp " + nominal;
+    previewCard.style.display = 'block';
+    form.style.display = 'none';
+  });
+
+  // Tombol Edit
+  btnEdit.addEventListener('click', function() {
+    previewCard.style.display = 'none';
+    form.style.display = 'block';
+  });
+
+  // Tombol Kirim Ulang
+  btnResend.addEventListener('click', function() {
+    alert("✅ Data telah dikirim ulang:\nTanggal: " + previewTanggal.textContent + "\nNominal: " + previewNominal.textContent);
   });
 </script>
 
