@@ -5,29 +5,41 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Catatan Penjualan Modern & Soft</title>
     <style>
-        /* Palet Warna Soft */
+        /* === Palet Warna Soft & Background Gambar === */
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
             padding: 30px;
-            background-color: #F7F9FC;
+            min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
+
+            /* ==== Ganti nama file background di bawah ini ==== */
+            background-image: url('logo.png');
+            /* Contoh: background-image: url('bg_es_teh.png'); */
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+
+            /* Tambahan lapisan lembut agar teks tetap terbaca */
+            background-color: rgba(247, 249, 252, 0.85);
+            background-blend-mode: lighten;
         }
+
         .card-container {
-            background-color: #FFFFFF;
+            background-color: rgba(255, 255, 255, 0.92);
             padding: 40px;
-            border-radius: 12px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            border-radius: 16px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
             max-width: 450px;
             width: 100%;
             border: 1px solid #EDEDED;
             text-align: center;
+            backdrop-filter: blur(6px); /* Efek kaca lembut */
         }
 
-        /* === Bagian Logo === */
+        /* === Logo === */
         .logo {
             width: 100px;
             height: 100px;
@@ -60,6 +72,7 @@
             font-size: 1em;
             color: #333333;
             transition: border-color 0.3s;
+            background-color: #FFFFFF;
         }
 
         input:focus {
@@ -125,8 +138,8 @@
 
     <!-- ==== Ganti nama file logo di bawah ini ==== -->
     <img src="logo.png" alt="Logo Toko" class="logo">
-    <!-- Contoh lain: <img src="logo_saya.jpg" alt="Logo Toko" class="logo"> -->
-    
+    <!-- Contoh lain: <img src="logo_es_teh.png" alt="Logo Toko" class="logo"> -->
+
     <h2>Catatan Penjualan Es Teh Time</h2>
     
     <form id="sales-form">
