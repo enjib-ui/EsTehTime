@@ -49,11 +49,12 @@
 <button class="btn-pdf" id="exportPDF">Ekspor ke PDF</button>
 <button class="btn-clear" id="clearData">Hapus Semua Data</button>
 
+<script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jspdf-autotable@3.5.28/dist/jspdf.plugin.autotable.js"></script>
+
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-app.js";
 import { getFirestore, collection, getDocs, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-firestore.js";
-import jsPDF from "https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js";
-import "https://cdn.jsdelivr.net/npm/jspdf-autotable@3.5.28/dist/jspdf.plugin.autotable.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAv2KN1pHrUPTMaNL2bXF39NI8S2iN2TWw",
@@ -156,8 +157,8 @@ document.getElementById('clearData').addEventListener('click', async () => {
 // Ekspor PDF
 document.getElementById('exportPDF').addEventListener('click', () => {
   if (!penjualanData.length) return alert("Tidak ada data untuk diekspor!");
-  const { jsPDF } = window.jspdf;
-  const doc = new jsPDF('p','pt');
+  const { jsPDF } = window.jspdf; // ✅ ambil dari global window
+  const doc = new jsPDF('p', 'pt');
 
   doc.setFontSize(16);
   doc.text("Data Penjualan Es Teh Time", 40, 40);
