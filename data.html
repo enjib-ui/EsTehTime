@@ -13,9 +13,12 @@
   th { background-color:#7E97A6; color:white; }
   tr:nth-child(even) { background-color:#f9f9f9; }
   tfoot td { font-weight:bold; background:#e2e2e2; }
-  .btn-clear { display:block; margin:20px auto; padding:10px 20px; border:none;
-               background-color:#e74c3c; color:white; border-radius:8px; cursor:pointer; font-weight:bold; transition:0.3s; }
+  .btn-clear, .btn-pdf { display:block; margin:10px auto; padding:10px 20px; border:none;
+               color:white; border-radius:8px; cursor:pointer; font-weight:bold; transition:0.3s; }
+  .btn-clear { background-color:#e74c3c; }
   .btn-clear:hover { background-color:#c0392b; }
+  .btn-pdf { background-color:#3498db; }
+  .btn-pdf:hover { background-color:#2980b9; }
   a.back { display:inline-block; margin-top:10px; color:#0077cc; text-decoration:none; font-size:0.9em; }
   a.back:hover { text-decoration:underline; }
 </style>
@@ -42,10 +45,13 @@
 </table>
 
 <button class="btn-clear" id="clearData">Hapus Semua Data</button>
+<button class="btn-pdf" id="exportPDF">Ekspor ke PDF</button>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-app.js";
 import { getFirestore, collection, getDocs, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-firestore.js";
+import jsPDF from "https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js";
+import "https://cdn.jsdelivr.net/npm/jspdf-autotable@3.5.28/dist/jspdf.plugin.autotable.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAv2KN1pHrUPTMaNL2bXF39NI8S2iN2TWw",
@@ -62,9 +68,12 @@ const db = getFirestore(app);
 const tbody = document.querySelector('#dataTable tbody');
 const totalNominalEl = document.getElementById('totalNominal');
 
+let penjualanData = []; // Menyimpan data untuk PDF
+
 async function loadData() {
   tbody.innerHTML = '<tr><td colspan="3">Memuat data...</td></tr>';
   totalNominalEl.textContent = 'Rp 0';
+  penjualanData = [];
 
   try {
     const snapshot = await getDocs(collection(db, "penjualan"));
@@ -84,6 +93,7 @@ async function loadData() {
       const nominal = Number(data.nominal) || 0;
 
       total += nominal;
+      penjualanData.push([index, tanggal, `Rp ${nominal.toLocaleString('id-ID')}`]);
 
       const row = document.createElement('tr');
       row.innerHTML = `
@@ -94,7 +104,6 @@ async function loadData() {
       tbody.appendChild(row);
     });
 
-    // Tampilkan total
     totalNominalEl.textContent = 'Rp ' + total.toLocaleString('id-ID');
 
   } catch (err) {
@@ -115,6 +124,41 @@ document.getElementById('clearData').addEventListener('click', async () => {
     alert("❌ Gagal menghapus data: " + err.message);
     console.error(err);
   }
+});
+
+document.getElementById('exportPDF').addEventListener('click', () => {
+  if (!penjualanData.length) return alert("Tidak ada data untuk diekspor!");
+
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF('p','pt');
+
+  // Tambahkan logo (ganti 'logo.png' sesuai file)
+  const img = new Image();
+  img.src = 'logo.png';
+  img.onload = () => {
+    doc.addImage(img, 'PNG', 40, 20, 50, 50);
+
+    // Judul dan tanggal cetak
+    doc.setFontSize(16);
+    doc.text("Data Penjualan Es Teh Time", 110, 40);
+    doc.setFontSize(10);
+    const now = new Date();
+    doc.text("Tanggal Cetak: " + now.toLocaleDateString('id-ID'), 110, 55);
+
+    // Tabel
+    doc.autoTable({
+      startY: 80,
+      head: [['No', 'Tanggal', 'Nominal (Rp)']],
+      body: penjualanData,
+      foot: [['', 'Total', totalNominalEl.textContent]],
+      theme: 'grid',
+      styles: { fontSize: 10 },
+      headStyles: { fillColor: [126,151,166] },
+      footStyles: { fillColor: [226,226,226] },
+    });
+
+    doc.save('Data_Penjualan.pdf');
+  };
 });
 
 loadData();
