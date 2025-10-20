@@ -30,6 +30,12 @@
       box-shadow: 0 8px 20px rgba(255, 182, 193, 0.4);
       text-align: center;
       border: 1px solid rgba(255, 192, 203, 0.3);
+      animation: zoomIn 0.8s ease; /* ✨ efek zoom saat muncul */
+    }
+
+    @keyframes zoomIn {
+      0% { transform: scale(0.6); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
     }
 
     .login-container h2 {
@@ -88,7 +94,7 @@
       display: none;
     }
 
-    /* Animasi halus saat muncul */
+    /* ✨ Animasi saat error muncul */
     .fade-in {
       animation: fadeIn 0.4s ease forwards;
     }
@@ -97,10 +103,23 @@
       from { opacity: 0; transform: translateY(-5px); }
       to { opacity: 1; transform: translateY(0); }
     }
+
+    /* ✨ Animasi shake saat salah login */
+    .shake {
+      animation: shake 0.4s ease;
+    }
+
+    @keyframes shake {
+      0% { transform: translateX(0); }
+      25% { transform: translateX(-8px); }
+      50% { transform: translateX(8px); }
+      75% { transform: translateX(-8px); }
+      100% { transform: translateX(0); }
+    }
   </style>
 </head>
 <body>
-  <div class="login-container">
+  <div class="login-container" id="loginBox">
     <h2>Login Admin 🍓</h2>
     <div class="input-group">
       <input type="text" id="username" placeholder="Username" />
@@ -120,13 +139,19 @@
       const user = document.getElementById("username").value.trim();
       const pass = document.getElementById("password").value.trim();
       const errorMsg = document.getElementById("errorMsg");
+      const loginBox = document.getElementById("loginBox");
 
       if (user === USERNAME && pass === PASSWORD) {
-        // ✅ Login benar → redirect ke data.html
         window.location.href = "data.html";
       } else {
         errorMsg.style.display = "block";
         errorMsg.classList.add("fade-in");
+
+        // ✨ animasi shake
+        loginBox.classList.add("shake");
+        setTimeout(() => {
+          loginBox.classList.remove("shake");
+        }, 400);
       }
     }
   </script>
