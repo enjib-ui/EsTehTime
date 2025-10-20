@@ -199,79 +199,113 @@
   </div>
 </div>
 
-<script>
-  const nominalInput = document.getElementById('nominal');
+<script type="module">
+  // ✅ Import Firebase SDK
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-app.js";
+  import { getFirestore, collection, addDoc, doc, updateDoc, getDoc } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-firestore.js";
+
+  // ✅ Konfigurasi Firebase kamu
+  const firebaseConfig = {
+    apiKey: "AIzaSyAv2KN1pHrUPTMaNL2bXF39NI8S2iN2TWw",
+    authDomain: "estehtime.firebaseapp.com",
+    projectId: "estehtime",
+    storageBucket: "estehtime.firebasestorage.app",
+    messagingSenderId: "185336920733",
+    appId: "1:185336920733:web:b0d09bdc8724ac80763274"
+  };
+
+  // ✅ Inisialisasi Firebase
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+
+  // 🧾 Elemen DOM
   const form = document.getElementById('sales-form');
+  const tanggalInput = document.getElementById('tanggal');
+  const nominalInput = document.getElementById('nominal');
   const previewCard = document.getElementById('preview-card');
   const previewTanggal = document.getElementById('preview-tanggal');
   const previewNominal = document.getElementById('preview-nominal');
   const btnEdit = document.getElementById('btn-edit');
   const btnResend = document.getElementById('btn-resend');
 
-  // Format angka ke format ribuan
-  nominalInput.addEventListener('input', function() {
-    let value = this.value.replace(/\D/g, '');
-    if (value) {
-      this.value = new Intl.NumberFormat('id-ID').format(value);
-    } else {
-      this.value = '';
+  let docIdTerakhir = localStorage.getItem('dataTerakhirId'); // 🔁 ambil dari localStorage jika ada
+
+  // 💰 Format nominal otomatis
+  nominalInput.addEventListener('input', () => {
+    let value = nominalInput.value.replace(/\D/g, '');
+    nominalInput.value = value ? new Intl.NumberFormat('id-ID').format(value) : '';
+  });
+
+  // 🔁 Saat halaman di-refresh → tampilkan data terakhir dari Firestore
+  window.addEventListener('load', async () => {
+    if (docIdTerakhir) {
+      try {
+        const docRef = doc(db, "penjualan", docIdTerakhir);
+        const snap = await getDoc(docRef);
+        if (snap.exists()) {
+          const data = snap.data();
+          previewTanggal.textContent = data.tanggal;
+          previewNominal.textContent = "Rp " + data.nominal;
+          previewCard.style.display = 'block';
+          form.style.display = 'none';
+        }
+      } catch (err) {
+        console.error("Gagal memuat data terakhir:", err);
+      }
     }
   });
 
-  // Saat halaman pertama kali dimuat, cek apakah ada data terakhir di localStorage
-  window.addEventListener('load', function() {
-    const dataTerakhir = JSON.parse(localStorage.getItem('dataTerakhir'));
-    if (dataTerakhir) {
-      previewTanggal.textContent = dataTerakhir.tanggal;
-      previewNominal.textContent = "Rp " + dataTerakhir.nominal;
-      previewCard.style.display = 'block';
-      form.style.display = 'none';
-    }
-  });
-
-  // Saat form disubmit
-  form.addEventListener('submit', function(e) {
+  // 📝 Simpan data baru ke Firestore
+  form.addEventListener('submit', async (e) => {
     e.preventDefault();
-
-    const tanggal = document.getElementById('tanggal').value;
+    const tanggal = tanggalInput.value;
     const nominal = nominalInput.value;
 
-    if (!tanggal || !nominal) {
-      alert("Mohon lengkapi semua data!");
-      return;
+    if (!tanggal || !nominal) return alert("Isi semua kolom dulu!");
+
+    try {
+      const docRef = await addDoc(collection(db, "penjualan"), {
+        tanggal,
+        nominal,
+        timestamp: new Date()
+      });
+      docIdTerakhir = docRef.id;
+      localStorage.setItem('dataTerakhirId', docRef.id);
+
+      previewTanggal.textContent = tanggal;
+      previewNominal.textContent = "Rp " + nominal;
+      previewCard.style.display = 'block';
+      form.style.display = 'none';
+
+      alert("✅ Data tersimpan di Firestore!");
+    } catch (err) {
+      alert("❌ Gagal menyimpan data: " + err.message);
     }
-
-    // Simpan data ke localStorage (riwayat dan terakhir)
-    const penjualan = JSON.parse(localStorage.getItem('penjualan')) || [];
-    penjualan.push({ tanggal, nominal });
-    localStorage.setItem('penjualan', JSON.stringify(penjualan));
-
-    localStorage.setItem('dataTerakhir', JSON.stringify({ tanggal, nominal }));
-
-    previewTanggal.textContent = tanggal;
-    previewNominal.textContent = "Rp " + nominal;
-    previewCard.style.display = 'block';
-    form.style.display = 'none';
   });
 
-  // Tombol Edit
-  btnEdit.addEventListener('click', function() {
-    const dataTerakhir = JSON.parse(localStorage.getItem('dataTerakhir'));
-    if (dataTerakhir) {
-      document.getElementById('tanggal').value = dataTerakhir.tanggal;
-      nominalInput.value = dataTerakhir.nominal;
-    }
-    previewCard.style.display = 'none';
+  // ✏️ Tombol Edit → kembali ke form
+  btnEdit.addEventListener('click', () => {
     form.style.display = 'block';
+    previewCard.style.display = 'none';
   });
 
-  // Tombol Kirim Ulang
-  btnResend.addEventListener('click', function() {
+  // 🔄 Tombol Kirim Ulang → update data Firestore
+  btnResend.addEventListener('click', async () => {
+    if (!docIdTerakhir) return alert("Tidak ada data untuk diperbarui!");
+
     const tanggal = previewTanggal.textContent;
-    const nominal = previewNominal.textContent;
-    alert("✅ Data telah dikirim ulang:\nTanggal: " + tanggal + "\nNominal: " + nominal);
+    const nominal = previewNominal.textContent.replace(/[^\d]/g, '');
+
+    try {
+      await updateDoc(doc(db, "penjualan", docIdTerakhir), {
+        tanggal,
+        nominal,
+        updatedAt: new Date()
+      });
+      alert("✅ Data berhasil diperbarui di Firestore!");
+    } catch (err) {
+      alert("❌ Gagal memperbarui data: " + err.message);
+    }
   });
 </script>
-
-</body>
-</html>
+  
