@@ -33,11 +33,49 @@
   padding: 10px 0;
   font-size: 14px;
 }
+  .filter-container {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.filter-container select,
+.filter-container button {
+  padding: 8px 10px;
+  font-size: 14px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
 </style>
 </head>
 <body>
 
 <h2>Data Penjualan Es Teh Time</h2>
+<div class="filter-container">
+  <label for="bulan">Bulan:</label>
+  <select id="bulan">
+    <option value="01">Januari</option>
+    <option value="02">Februari</option>
+    <option value="03">Maret</option>
+    <option value="04">April</option>
+    <option value="05">Mei</option>
+    <option value="06">Juni</option>
+    <option value="07">Juli</option>
+    <option value="08">Agustus</option>
+    <option value="09">September</option>
+    <option value="10">Oktober</option>
+    <option value="11">November</option>
+    <option value="12">Desember</option>
+  </select>
+
+  <label for="tahun">Tahun:</label>
+  <select id="tahun"></select>
+
+  <button id="filterBtn">Tampilkan</button>
+</div>
 
 <table id="dataTable">
   <thead>
@@ -95,8 +133,17 @@ function parseNominal(value) {
   const num = parseFloat(value.toString().replace(/[^0-9]/g, ''));
   return isNaN(num) ? 0 : num;
 }
+    // Isi dropdown tahun dari 2020 - tahun sekarang
+const tahunSelect = document.getElementById('tahun');
+const currentYear = new Date().getFullYear();
+for (let y = currentYear; y >= 2020; y--) {
+  const opt = document.createElement('option');
+  opt.value = y;
+  opt.textContent = y;
+  tahunSelect.appendChild(opt);
+                                                      }
 
-async function loadData() {
+async function loadData(filterBulan = null, filterTahun = null) {
   tbody.innerHTML = '<tr><td colspan="4">Memuat data...</td></tr>';
   totalNominalEl.textContent = 'Rp 0';
   penjualanData = [];
@@ -117,6 +164,11 @@ async function loadData() {
       const data = docSnap.data();
       const tanggal = data.tanggal || docSnap.id;
       const nominal = parseNominal(data.nominal);
+      // --- FILTER PER BULAN ---
+  if (filterBulan && filterTahun) {
+    const [day, month, year] = tanggal.split(/[\/\-]/); // sesuaikan format tanggal kamu
+    if (month !== filterBulan || year !== filterTahun) return;
+  }
 
       total += nominal;
 
@@ -203,6 +255,12 @@ document.getElementById('exportPDF').addEventListener('click', () => {
 
   doc.save('Data_Penjualan.pdf');
 });
+  document.getElementById('filterBtn').addEventListener('click', () => {
+  const bulan = document.getElementById('bulan').value;
+  const tahun = document.getElementById('tahun').value;
+  loadData(bulan, tahun);
+});
+                                                      
 
 loadData();
 </script>
