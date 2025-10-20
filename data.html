@@ -90,36 +90,58 @@
 <button class="btn-clear" id="clearData">Hapus Semua Data</button>
 <center><a href="index.html" class="back">⬅ Kembali ke Halaman Utama</a></center>
 
-<script>
-  const tbody = document.querySelector('#dataTable tbody');
-  const data = JSON.parse(localStorage.getItem('penjualan')) || [];
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-app.js";
+  import { getFirestore, collection, getDocs, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-firestore.js";
 
-  function loadTable() {
+  const firebaseConfig = {
+    apiKey: "AIzaSyAv2KN1pHrUPTMaNL2bXF39NI8S2iN2TWw",
+    authDomain: "estehtime.firebaseapp.com",
+    projectId: "estehtime",
+    storageBucket: "estehtime.firebasestorage.app",
+    messagingSenderId: "185336920733",
+    appId: "1:185336920733:web:b0d09bdc8724ac80763274"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+
+  const tbody = document.querySelector('#dataTable tbody');
+
+  async function loadData() {
+    tbody.innerHTML = '<tr><td colspan="3">Memuat data...</td></tr>';
+
+    const snapshot = await getDocs(collection(db, "penjualan"));
     tbody.innerHTML = '';
-    if (data.length === 0) {
+
+    if (snapshot.empty) {
       tbody.innerHTML = '<tr><td colspan="3">Belum ada data tersimpan.</td></tr>';
       return;
     }
 
-    data.forEach((item, index) => {
+    let index = 1;
+    snapshot.forEach((doc) => {
+      const data = doc.data();
       const row = document.createElement('tr');
       row.innerHTML = `
-        <td>${index + 1}</td>
-        <td>${item.tanggal}</td>
-        <td>Rp ${item.nominal}</td>
+        <td>${index++}</td>
+        <td>${data.tanggal}</td>
+        <td>Rp ${Number(data.nominal).toLocaleString('id-ID')}</td>
       `;
       tbody.appendChild(row);
     });
   }
 
-  document.getElementById('clearData').addEventListener('click', () => {
+  document.getElementById('clearData').addEventListener('click', async () => {
     if (confirm('Yakin ingin menghapus semua data?')) {
-      localStorage.removeItem('penjualan');
-      location.reload();
+      const snapshot = await getDocs(collection(db, "penjualan"));
+      snapshot.forEach(async (d) => await deleteDoc(doc(db, "penjualan", d.id)));
+      alert("Semua data berhasil dihapus!");
+      loadData();
     }
   });
 
-  loadTable();
+  loadData();
 </script>
 
 </body>
