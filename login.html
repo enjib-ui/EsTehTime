@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login - Aplikasi Penjualan</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Poppins", sans-serif;
+    }
+
+    body {
+      min-height: 100vh;
+      background: url('bg.jpg') center/cover no-repeat;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .login-container {
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(10px);
+      padding: 30px 25px;
+      border-radius: 12px;
+      width: 100%;
+      max-width: 360px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+      text-align: center;
+    }
+
+    .login-container h2 {
+      color: #fff;
+      font-size: 1.6em;
+      margin-bottom: 20px;
+    }
+
+    .input-group {
+      position: relative;
+      margin-bottom: 18px;
+    }
+
+    .input-group input {
+      width: 100%;
+      padding: 12px 14px;
+      border: none;
+      outline: none;
+      border-radius: 8px;
+      font-size: 1em;
+      background: rgba(255, 255, 255, 0.8);
+    }
+
+    .input-group input:focus {
+      box-shadow: 0 0 0 2px rgba(126, 151, 166, 0.7);
+    }
+
+    .login-btn {
+      width: 100%;
+      padding: 12px;
+      background: rgba(126, 151, 166, 0.9);
+      color: white;
+      font-size: 1em;
+      font-weight: 600;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    .login-btn:hover {
+      background: rgba(106, 130, 145, 1);
+    }
+
+    .error-msg {
+      color: #ffcccc;
+      font-size: 0.9em;
+      margin-top: 10px;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="login-container">
+    <h2>Login Admin</h2>
+    <div class="input-group">
+      <input type="text" id="username" placeholder="Username" />
+    </div>
+    <div class="input-group">
+      <input type="password" id="password" placeholder="Password" />
+    </div>
+    <button class="login-btn" onclick="login()">Masuk</button>
+    <div class="error-msg" id="errorMsg">Username atau password salah</div>
+  </div>
+
+  <script>
+    // Ganti username dan password sesuai kebutuhanmu
+    const USERNAME = "estehtime";
+    const PASSWORD = "aisya";
+
+    function login() {
+      const user = document.getElementById("username").value;
+      const pass = document.getElementById("password").value;
+      const errorMsg = document.getElementById("errorMsg");
+
+      if (user === USERNAME && pass === PASSWORD) {
+        // ✅ Jika login benar, arahkan ke data.html
+        window.location.href = "data.html";
+      } else {
+        errorMsg.style.display = "block";
+      }
+    }
+  </script>
+</body>
+</html>
