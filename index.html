@@ -9,10 +9,15 @@
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     margin: 0; padding: 30px; min-height: 100vh;
     display: flex; justify-content: center; align-items: center;
-    background-image: url('background.jpg');
-    background-size: cover; background-position: center;
-    background-repeat: no-repeat; background-color: rgba(247,249,252,0.85);
-    background-blend-mode: lighten;
+    background: 
+      linear-gradient(rgba(255, 255, 255, 0.5), rgba(126, 151, 166, 0.5)),  /* overlay gradasi */
+      url('background.jpg');                                               /* gambar background */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+
+    /* efek lembut */
+    backdrop-filter: blur(6px);
   }
   .card-container {
     background-color: rgba(255,255,255,0.92); padding: 40px;
