@@ -21,25 +21,28 @@
     }
 
     .login-container {
-      background: rgba(255, 255, 255, 0.15);
-      backdrop-filter: blur(10px);
-      padding: 30px 25px;
-      border-radius: 12px;
+      background: rgba(255, 182, 193, 0.15); /* soft pink transparan */
+      backdrop-filter: blur(12px);
+      padding: 35px 25px;
+      border-radius: 20px;
       width: 100%;
-      max-width: 360px;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+      max-width: 380px;
+      box-shadow: 0 8px 20px rgba(255, 182, 193, 0.4);
       text-align: center;
+      border: 1px solid rgba(255, 192, 203, 0.3);
     }
 
     .login-container h2 {
       color: #fff;
-      font-size: 1.6em;
+      font-size: 1.8em;
+      font-weight: 600;
       margin-bottom: 20px;
+      letter-spacing: 1px;
     }
 
     .input-group {
       position: relative;
-      margin-bottom: 18px;
+      margin-bottom: 20px;
     }
 
     .input-group input {
@@ -47,43 +50,58 @@
       padding: 12px 14px;
       border: none;
       outline: none;
-      border-radius: 8px;
+      border-radius: 10px;
       font-size: 1em;
-      background: rgba(255, 255, 255, 0.8);
+      background: rgba(255, 255, 255, 0.85);
+      transition: box-shadow 0.3s ease;
     }
 
     .input-group input:focus {
-      box-shadow: 0 0 0 2px rgba(126, 151, 166, 0.7);
+      box-shadow: 0 0 0 3px rgba(255, 192, 203, 0.6);
     }
 
     .login-btn {
       width: 100%;
-      padding: 12px;
-      background: rgba(126, 151, 166, 0.9);
+      padding: 13px;
+      background: linear-gradient(to right, #ffb6c1, #ff91a4);
       color: white;
       font-size: 1em;
       font-weight: 600;
       border: none;
-      border-radius: 8px;
+      border-radius: 10px;
       cursor: pointer;
-      transition: background 0.3s ease;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
     }
 
     .login-btn:hover {
-      background: rgba(106, 130, 145, 1);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 15px rgba(255, 145, 164, 0.4);
     }
 
     .error-msg {
-      color: #ffcccc;
+      color: #fff0f3;
+      background: rgba(255, 105, 135, 0.7);
+      padding: 6px 10px;
+      border-radius: 6px;
       font-size: 0.9em;
-      margin-top: 10px;
+      margin-top: 12px;
       display: none;
+    }
+
+    /* Animasi halus saat muncul */
+    .fade-in {
+      animation: fadeIn 0.4s ease forwards;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-5px); }
+      to { opacity: 1; transform: translateY(0); }
     }
   </style>
 </head>
 <body>
   <div class="login-container">
-    <h2>Login Admin</h2>
+    <h2>Login Admin 🍓</h2>
     <div class="input-group">
       <input type="text" id="username" placeholder="Username" />
     </div>
@@ -95,20 +113,20 @@
   </div>
 
   <script>
-    // Ganti username dan password sesuai kebutuhanmu
     const USERNAME = "estehtime";
     const PASSWORD = "aisya";
 
     function login() {
-      const user = document.getElementById("username").value;
-      const pass = document.getElementById("password").value;
+      const user = document.getElementById("username").value.trim();
+      const pass = document.getElementById("password").value.trim();
       const errorMsg = document.getElementById("errorMsg");
 
       if (user === USERNAME && pass === PASSWORD) {
-        // ✅ Jika login benar, arahkan ke data.html
+        // ✅ Login benar → redirect ke data.html
         window.location.href = "data.html";
       } else {
         errorMsg.style.display = "block";
+        errorMsg.classList.add("fade-in");
       }
     }
   </script>
