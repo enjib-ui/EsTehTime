@@ -30,6 +30,7 @@
       <th>No</th>
       <th>Tanggal</th>
       <th>Nominal (Rp)</th>
+      <th>Aksi</th>
     </tr>
   </thead>
   <tbody></tbody>
@@ -87,10 +88,13 @@ async function loadData() {
 
       const row = document.createElement('tr');
       row.innerHTML = `
-        <td>${index++}</td>
-        <td>${tanggal}</td>
-        <td>Rp ${nominal.toLocaleString('id-ID')}</td>
-      `;
+  <td>${index++}</td>
+  <td>${tanggal}</td>
+  <td>Rp ${nominal.toLocaleString('id-ID')}</td>
+  <td>
+    <button class="btn-delete" data-id="${docSnap.id}" style="padding:5px 10px; background:#e74c3c; color:white; border:none; border-radius:5px; cursor:pointer;">Hapus</button>
+  </td>
+`;
       tbody.appendChild(row);
     });
 
@@ -102,6 +106,18 @@ async function loadData() {
     console.error(err);
   }
 }
+  row.querySelector('.btn-delete').addEventListener('click', async () => {
+  if (!confirm(`Hapus data tanggal ${tanggal}?`)) return;
+  try {
+    await deleteDoc(doc(db, "penjualan", docSnap.id));
+    alert("✅ Data berhasil dihapus!");
+    loadData();
+  } catch (err) {
+    alert("❌ Gagal menghapus data: " + err.message);
+    console.error(err);
+  }
+});
+      
 
 document.getElementById('clearData').addEventListener('click', async () => {
   if (!confirm('Yakin ingin menghapus semua data?')) return;
