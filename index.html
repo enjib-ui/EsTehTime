@@ -19,6 +19,30 @@
     /* efek lembut */
     backdrop-filter: blur(1px);
   }
+  /* ✅ Tambahan CSS untuk tombol pojok kanan atas */
+#lihatDataBtn {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: rgba(126, 151, 166, 0.8);
+  color: white;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.95em;
+  cursor: pointer;
+  backdrop-filter: blur(5px);
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+#lihatDataBtn:hover {
+  background: rgba(106, 130, 145, 0.9);
+  transform: translateY(-1px);
+}
+#lihatDataBtn:active {
+  transform: translateY(0);
+}
+  
   .card-container {
   background-color: rgba(255,255,255,0.2); /* dari 0.92 jadi 0.2 */
   padding: 40px;
@@ -82,6 +106,8 @@ input#nominal {
 </style>
 </head>
 <body>
+  
+<button id="lihatDataBtn">Lihat Data</button>
 
 <div class="card-container">
   <img src="logo.png" alt="Logo Toko" class="logo">
@@ -142,6 +168,14 @@ const previewTanggal = document.getElementById('preview-tanggal');
 const previewNominal = document.getElementById('preview-nominal');
 const btnEdit = document.getElementById('btn-edit');
 const btnResend = document.getElementById('btn-resend');
+
+
+
+const lihatDataBtn = document.getElementById('lihatDataBtn');
+lihatDataBtn.addEventListener('click', () => {
+  window.location.href = 'login.html';  // arahkan ke halaman login
+});
+  
 
 // Ambil tanggal hari ini
 const tanggalHariIni = new Date().toISOString().split('T')[0];
