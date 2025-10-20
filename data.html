@@ -34,12 +34,20 @@
   font-size: 14px;
 }
   .filter-container {
+.filter-container {
   display: flex;
   justify-content: center;
-  gap: 10px;
   align-items: center;
-  flex-wrap: wrap;
+  gap: 8px;
   margin-bottom: 20px;
+  flex-wrap: nowrap;          /* ⛔ tidak pindah ke baris baru */
+  overflow-x: auto;           /* ✅ geser jika layar kecil */
+  padding: 0 5px;
+}
+
+.filter-container label {
+  font-size: 14px;
+  white-space: nowrap;       /* agar tulisan tidak turun ke bawah */
 }
 
 .filter-container select,
@@ -48,6 +56,23 @@
   font-size: 14px;
   border-radius: 5px;
   border: 1px solid #ccc;
+  flex: 1;                   /* ✅ lebar menyesuaikan layar */
+  min-width: 90px;           /* batas minimum lebar */
+}
+
+/* 🌟 Responsif untuk HP kecil */
+@media (max-width: 480px) {
+  .filter-container {
+    gap: 5px;
+  }
+  .filter-container select,
+  .filter-container button {
+    font-size: 12px;
+    padding: 6px 8px;
+  }
+  .filter-container label {
+    font-size: 12px;
+  }
 }
   .logout-btn {
     position: fixed;
