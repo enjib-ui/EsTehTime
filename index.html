@@ -218,7 +218,18 @@
     }
   });
 
-  // Simpan ke data.html lewat localStorage
+  // Saat halaman pertama kali dimuat, cek apakah ada data terakhir di localStorage
+  window.addEventListener('load', function() {
+    const dataTerakhir = JSON.parse(localStorage.getItem('dataTerakhir'));
+    if (dataTerakhir) {
+      previewTanggal.textContent = dataTerakhir.tanggal;
+      previewNominal.textContent = "Rp " + dataTerakhir.nominal;
+      previewCard.style.display = 'block';
+      form.style.display = 'none';
+    }
+  });
+
+  // Saat form disubmit
   form.addEventListener('submit', function(e) {
     e.preventDefault();
 
@@ -230,10 +241,12 @@
       return;
     }
 
-    // Simpan data ke localStorage
+    // Simpan data ke localStorage (riwayat dan terakhir)
     const penjualan = JSON.parse(localStorage.getItem('penjualan')) || [];
     penjualan.push({ tanggal, nominal });
     localStorage.setItem('penjualan', JSON.stringify(penjualan));
+
+    localStorage.setItem('dataTerakhir', JSON.stringify({ tanggal, nominal }));
 
     previewTanggal.textContent = tanggal;
     previewNominal.textContent = "Rp " + nominal;
@@ -243,13 +256,20 @@
 
   // Tombol Edit
   btnEdit.addEventListener('click', function() {
+    const dataTerakhir = JSON.parse(localStorage.getItem('dataTerakhir'));
+    if (dataTerakhir) {
+      document.getElementById('tanggal').value = dataTerakhir.tanggal;
+      nominalInput.value = dataTerakhir.nominal;
+    }
     previewCard.style.display = 'none';
     form.style.display = 'block';
   });
 
   // Tombol Kirim Ulang
   btnResend.addEventListener('click', function() {
-    alert("✅ Data telah dikirim ulang:\nTanggal: " + previewTanggal.textContent + "\nNominal: " + previewNominal.textContent);
+    const tanggal = previewTanggal.textContent;
+    const nominal = previewNominal.textContent;
+    alert("✅ Data telah dikirim ulang:\nTanggal: " + tanggal + "\nNominal: " + nominal);
   });
 </script>
 
