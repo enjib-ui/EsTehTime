@@ -144,11 +144,6 @@
             </div>
         </div>
 
-        <div>
-            <label for="gambar">📷 Gambar Penjualan:</label>
-            <input type="file" id="gambar" name="gambar" accept="image/*">
-        </div>
-
         <div class="image-preview">
             <img id="preview-img" alt="Preview Gambar">
         </div>
@@ -156,26 +151,6 @@
         <button type="submit">Simpan Catatan</button>
     </form>
 </div>
-
-<script>
-    // Preview gambar otomatis saat dipilih
-    const inputGambar = document.getElementById('gambar');
-    const previewImg = document.getElementById('preview-img');
-
-    inputGambar.addEventListener('change', function() {
-        const file = this.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                previewImg.src = e.target.result;
-                previewImg.style.display = 'block';
-            }
-            reader.readAsDataURL(file);
-        } else {
-            previewImg.style.display = 'none';
-        }
-    });
-</script>
 
 </body>
 </html>
