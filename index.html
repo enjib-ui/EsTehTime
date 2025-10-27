@@ -196,7 +196,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   });
 
   // ✅ Set tanggal otomatis
-  const tanggalHariIni = new Date().toISOString().split('T')[0];
+  const tanggalHariIni = `${tahun}-${bulan}-${tanggal}`;
   tanggalInput.value = tanggalHariIni;
 
   // 🔹 Format nominal
