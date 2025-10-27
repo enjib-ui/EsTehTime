@@ -20,25 +20,29 @@
 
   #lihatDataBtn {
   position: fixed;
-  top: 15px;
-  right: 15px;
+  top: 20px;
+  right: 20px;
   background: rgba(126, 151, 166, 0.85);
   color: #fff;
   border: none;
   border-radius: 8px;
   font-weight: 600;
-  font-size: 0.9em;
-  padding: 6px 12px; /* 🔹 menyesuaikan panjang teks */
+  font-size: 0.95em;
+  padding: 8px 14px; /* 🔹 menyesuaikan panjang teks */
   cursor: pointer;
   backdrop-filter: blur(5px);
   box-shadow: 0 2px 8px rgba(0,0,0,0.15);
   transition: background 0.3s ease, transform 0.2s ease;
   z-index: 999; /* 🔹 pastikan selalu di atas elemen lain */
+  width: auto;
+  min-width: unset;
 }
 #lihatDataBtn:hover {
   background: rgba(106, 130, 145, 0.95);
-  transform: translateY(-2px);
+  transform: translateY(-1px);
 }
+#lihatDataBtn:active {
+  transform:translateY(0);
 
   .card-container {
     background-color: rgba(255,255,255,0.2);
