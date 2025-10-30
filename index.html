@@ -9,7 +9,7 @@
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     margin: 0; padding: 30px; min-height: 100vh;
     display: flex; justify-content: center; align-items: center;
-    background:
+    background: 
       linear-gradient(rgba(255, 255, 255, 0.5), rgba(126, 151, 166, 0.5)),
       url('background.jpg');
     background-size: cover;
@@ -19,31 +19,31 @@
   }
 
   #lihatDataBtn {
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    background: rgba(126, 151, 166, 0.85);
-    color: #fff;
-    border: none;
-    border-radius: 8px;
-    font-weight: 600;
-    font-size: 0.95em;
-    padding: 8px 14px;
-    cursor: pointer;
-    backdrop-filter: blur(5px);
-    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-    transition: background 0.3s ease, transform 0.2s ease;
-    z-index: 999;
-    width: auto;
-  }
-  #lihatDataBtn:hover {
-    background: rgba(106, 130, 145, 0.95);
-    transform: translateY(-1px);
-  }
-  #lihatDataBtn:active {
-    transform: translateY(0);
-  }
-
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: rgba(126, 151, 166, 0.85);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.95em;
+  padding: 8px 14px; /* 🔹 menyesuaikan panjang teks */
+  cursor: pointer;
+  backdrop-filter: blur(5px);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  transition: background 0.3s ease, transform 0.2s ease;
+  z-index: 999; /* 🔹 pastikan selalu di atas elemen lain */
+  width: auto;
+  min-width: unset;
+}
+#lihatDataBtn:hover {
+  background: rgba(106, 130, 145, 0.95);
+  transform: translateY(-1px);
+}
+#lihatDataBtn:active {
+  transform:translateY(0);
+}
   .card-container {
     background-color: rgba(255,255,255,0.2);
     padding: 40px;
@@ -54,6 +54,7 @@
     border: 1px solid rgba(255,255,255,0.4);
     text-align: center;
     backdrop-filter: blur(10px);
+    transition: all 0.3s ease;
   }
 
   .logo { width:80px; height:80px; object-fit:contain; margin-bottom:1px; }
@@ -113,6 +114,7 @@
   .btn-edit:hover { background-color:#e39c41; }
   .btn-resend:hover { background-color:#4cae4c; }
 
+  /* Tombol WhatsApp di bawah catatan */
   #btn-wa {
     margin-top: 15px;
     background-color: #25D366;
@@ -157,55 +159,55 @@
       <button class="btn-resend" id="btn-resend">Kirim Ulang</button>
     </div>
 
+    <!-- ✅ Tombol WhatsApp -->
     <button id="btn-wa">Kirim ke WhatsApp</button>
   </div>
 </div>
 
 <script type="module">
-document.addEventListener("DOMContentLoaded", async () => {
-  // 🔹 Import Firebase setelah DOM siap
-  const { initializeApp } = await import("https://www.gstatic.com/firebasejs/12.4.0/firebase-app.js");
-  const { getFirestore, doc, setDoc, getDoc } = await import("https://www.gstatic.com/firebasejs/12.4.0/firebase-firestore.js");
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-app.js";
+import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-firestore.js";
 
-  const firebaseConfig = {
-    apiKey: "AIzaSyAv2KN1pHrUPTMaNL2bXF39NI8S2iN2TWw",
-    authDomain: "estehtime.firebaseapp.com",
-    projectId: "estehtime",
-    storageBucket: "estehtime.firebasestorage.app",
-    messagingSenderId: "185336920733",
-    appId: "1:185336920733:web:b0d09bdc8724ac80763274"
-  };
+const firebaseConfig = {
+  apiKey: "AIzaSyAv2KN1pHrUPTMaNL2bXF39NI8S2iN2TWw",
+  authDomain: "estehtime.firebaseapp.com",
+  projectId: "estehtime",
+  storageBucket: "estehtime.firebasestorage.app",
+  messagingSenderId: "185336920733",
+  appId: "1:185336920733:web:b0d09bdc8724ac80763274"
+};
 
-  const app = initializeApp(firebaseConfig);
-  const db = getFirestore(app);
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
 
-  const form = document.getElementById('sales-form');
-  const tanggalInput = document.getElementById('tanggal');
-  const nominalInput = document.getElementById('nominal');
-  const previewCard = document.getElementById('preview-card');
-  const previewTanggal = document.getElementById('preview-tanggal');
-  const previewNominal = document.getElementById('preview-nominal');
-  const btnEdit = document.getElementById('btn-edit');
-  const btnResend = document.getElementById('btn-resend');
-  const btnWA = document.getElementById('btn-wa');
-  const lihatDataBtn = document.getElementById('lihatDataBtn');
+const form = document.getElementById('sales-form');
+const tanggalInput = document.getElementById('tanggal');
+const nominalInput = document.getElementById('nominal');
+const previewCard = document.getElementById('preview-card');
+const previewTanggal = document.getElementById('preview-tanggal');
+const previewNominal = document.getElementById('preview-nominal');
+const btnEdit = document.getElementById('btn-edit');
+const btnResend = document.getElementById('btn-resend');
+const btnWA = document.getElementById('btn-wa');
+const lihatDataBtn = document.getElementById('lihatDataBtn');
 
-  // 🔹 Tombol lihat data
-  lihatDataBtn.addEventListener('click', () => {
-    window.location.href = 'login.html';
-  });
+// tombol lihat data
+lihatDataBtn.addEventListener('click', () => {
+  window.location.href = 'login.html';
+});
 
-  // ✅ Set tanggal otomatis
-  const tanggalHariIni = `${tahun}-${bulan}-${tanggal}`;
-  tanggalInput.value = tanggalHariIni;
+// set tanggal hari ini
+const tanggalHariIni = new Date().toISOString().split('T')[0];
+tanggalInput.value = tanggalHariIni;
 
-  // 🔹 Format nominal
-  nominalInput.addEventListener('input', () => {
-    let value = nominalInput.value.replace(/\D/g,'');
-    nominalInput.value = value ? new Intl.NumberFormat('id-ID').format(value) : '';
-  });
+// format input nominal
+nominalInput.addEventListener('input', () => {
+  let value = nominalInput.value.replace(/\D/g,'');
+  nominalInput.value = value ? new Intl.NumberFormat('id-ID').format(value) : '';
+});
 
-  // 🔹 Load data hari ini dari Firestore
+// load data hari ini
+window.addEventListener('load', async () => {
   try {
     const docRef = doc(db, "penjualan", tanggalHariIni);
     const snap = await getDoc(docRef);
@@ -219,63 +221,65 @@ document.addEventListener("DOMContentLoaded", async () => {
   } catch (err) {
     console.error("Gagal memuat data:", err);
   }
+});
 
-  // 🔹 Simpan data baru
-  form.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const tanggal = tanggalInput.value;
-    const nominal = parseInt(nominalInput.value.replace(/\D/g,''));
-    if (!tanggal || !nominal) return alert("Isi semua kolom dulu!");
+// simpan data
+form.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const tanggal = tanggalInput.value;
+  const nominal = parseInt(nominalInput.value.replace(/\D/g,''));
+  if (!tanggal || !nominal) return alert("Isi semua kolom dulu!");
 
-    try {
-      await setDoc(doc(db, "penjualan", tanggal), {
-        tanggal, nominal, updatedAt: new Date()
-      }, { merge: true });
+  try {
+    await setDoc(doc(db, "penjualan", tanggal), {
+      tanggal, nominal, updatedAt: new Date()
+    }, { merge: true });
 
-      previewTanggal.textContent = tanggal;
-      previewNominal.textContent = "Rp " + new Intl.NumberFormat('id-ID').format(nominal);
-      previewCard.style.display = 'block';
-      form.style.display = 'none';
-      alert("✅ Data berhasil disimpan!");
-    } catch (err) {
-      alert("❌ Gagal menyimpan data: " + err.message);
-    }
-  });
+    previewTanggal.textContent = tanggal;
+    previewNominal.textContent = "Rp " + new Intl.NumberFormat('id-ID').format(nominal);
+    previewCard.style.display = 'block';
+    form.style.display = 'none';
 
-  // 🔹 Edit data
-  btnEdit.addEventListener('click', () => {
-    form.style.display = 'block';
-    previewCard.style.display = 'none';
-  });
+    alert("✅ Data berhasil disimpan!");
+  } catch (err) {
+    alert("❌ Gagal menyimpan data: " + err.message);
+  }
+});
 
-  // 🔹 Kirim ulang
-  btnResend.addEventListener('click', async () => {
-    const tanggal = previewTanggal.textContent;
-    const nominal = parseInt(nominalInput.value.replace(/\D/g,''));
-    if (!nominal) return alert("Isi nominal dulu!");
+// edit data
+btnEdit.addEventListener('click', () => {
+  form.style.display = 'block';
+  previewCard.style.display = 'none';
+});
 
-    try {
-      await setDoc(doc(db, "penjualan", tanggal), {
-        tanggal, nominal, updatedAt: new Date()
-      }, { merge: true });
+// kirim ulang
+btnResend.addEventListener('click', async () => {
+  const tanggal = previewTanggal.textContent;
+  const nominal = parseInt(nominalInput.value.replace(/\D/g,''));
+  if (!nominal) return alert("Isi nominal dulu!");
 
-      previewNominal.textContent = "Rp " + new Intl.NumberFormat('id-ID').format(nominal);
-      alert("✅ Data diperbarui!");
-    } catch (err) {
-      alert("❌ Gagal memperbarui data: " + err.message);
-    }
-  });
+  try {
+    await setDoc(doc(db, "penjualan", tanggal), {
+      tanggal, nominal, updatedAt: new Date()
+    }, { merge: true });
 
-  // ✅ Kirim ke WhatsApp
-  btnWA.addEventListener('click', () => {
-    const tanggal = previewTanggal.textContent;
-    const nominal = previewNominal.textContent.replace("Rp ", "");
-    const pesan = `Penjualan hari ini ${nominal} Kak (Tanggal ${tanggal})`;
-    const nomorWA = "6282337279096"; // ganti nomor tujuan Anda
-    const url = `https://wa.me/${nomorWA}?text=${encodeURIComponent(pesan)}`;
-    window.open(url, '_blank');
-  });
+    previewNominal.textContent = "Rp " + new Intl.NumberFormat('id-ID').format(nominal);
+    alert("✅ Data diperbarui!");
+  } catch (err) {
+    alert("❌ Gagal memperbarui data: " + err.message);
+  }
+});
+
+// ✅ kirim ke WhatsApp
+btnWA.addEventListener('click', () => {
+  const tanggal = previewTanggal.textContent;
+  const nominal = previewNominal.textContent.replace("Rp ", "");
+  const pesan = `Penjualan hari ini ${nominal} Kak (Tanggal ${tanggal})`;
+  const nomorWA = "6282337279096"; // ganti nomor tujuan Anda
+  const url = `https://wa.me/${nomorWA}?text=${encodeURIComponent(pesan)}`;
+  window.open(url, '_blank');
 });
 </script>
 </body>
-</html>
+  </html>
+  
