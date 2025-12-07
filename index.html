@@ -325,11 +325,29 @@ btnResend.addEventListener('click', async () => {
 btnWA.addEventListener('click', () => {
   const tanggal = previewTanggal.textContent;
   const nominal = previewNominal.textContent.replace("Rp ", "");
-  const pesan = `Penjualan hari ini ${nominal} Kak (Tanggal ${tanggal})`;
-  const nomorWA = "6282337279096"; // ganti nomor tujuan Anda
+
+  const pengeluaran =
+    previewPengeluaran.textContent
+      ? previewPengeluaran.textContent
+      : "Rp 0";
+
+  const keterangan =
+    previewKeterangan.textContent
+      ? previewKeterangan.textContent
+      : "-";
+
+  const pesan =
+`📊 Laporan Penjualan
+📅 Tanggal: ${tanggal}
+💰 Penjualan: ${nominal}
+💸 Pengeluaran: ${pengeluaran}
+📝 Keterangan: ${keterangan}`;
+
+  const nomorWA = "6282337279096"; // ganti bila perlu
   const url = `https://wa.me/${nomorWA}?text=${encodeURIComponent(pesan)}`;
   window.open(url, '_blank');
 });
+
 </script>
 </body>
   </html>
