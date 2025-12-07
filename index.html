@@ -251,8 +251,19 @@ window.addEventListener('load', async () => {
     const snap = await getDoc(docRef);
     if (snap.exists()) {
       const data = snap.data();
+
       previewTanggal.textContent = data.tanggal || tanggalHariIni;
-      previewNominal.textContent = "Rp " + new Intl.NumberFormat('id-ID').format(data.nominal || 0);
+      previewNominal.textContent =
+        "Rp " + new Intl.NumberFormat('id-ID').format(data.nominal || 0);
+
+      const pengeluaranNominal = data.pengeluaran?.nominal || 0;
+      const keterangan = data.pengeluaran?.keterangan || "-";
+
+      previewPengeluaran.textContent =
+        "Rp " + new Intl.NumberFormat('id-ID').format(pengeluaranNominal);
+
+      previewKeterangan.textContent = keterangan;
+
       previewCard.style.display = 'block';
       form.style.display = 'none';
     }
@@ -260,6 +271,7 @@ window.addEventListener('load', async () => {
     console.error("Gagal memuat data:", err);
   }
 });
+
 
 // simpan data
 form.addEventListener('submit', async (e) => {
@@ -290,6 +302,11 @@ await setDoc(doc(db, "penjualan", tanggal), {
     previewNominal.textContent = "Rp " + new Intl.NumberFormat('id-ID').format(nominal);
     previewCard.style.display = 'block';
     form.style.display = 'none';
+    previewPengeluaran.textContent =
+  "Rp " + new Intl.NumberFormat('id-ID').format(pengeluaranNominal);
+
+previewKeterangan.textContent = keterangan || "-";
+
 
     alert("✅ Data berhasil disimpan!");
   } catch (err) {
