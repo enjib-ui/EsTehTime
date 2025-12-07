@@ -145,6 +145,24 @@
         <input type="text" id="nominal" name="nominal" placeholder="Masukkan Nominal Penjualan..." required>
       </div>
     </div>
+    <div>
+  <label>💸 Pengeluaran:</label>
+
+  <div class="rupiah-input-group" style="margin-bottom:10px">
+    <span class="rupiah-prefix">Rp</span>
+    <input
+      type="text"
+      id="pengeluaran"
+      placeholder="Nominal Pengeluaran..."
+    >
+  </div>
+
+  <input
+    type="text"
+    id="keterangan"
+    placeholder="Keterangan Pengeluaran (contoh: gula, es, dll)"
+  >
+</div>
 
     <button type="submit">Simpan Catatan</button>
   </form>
@@ -153,6 +171,14 @@
     <h3>📋 Catatan Tersimpan</h3>
     <p><strong>Tanggal:</strong> <span id="preview-tanggal"></span></p>
     <p><strong>Nominal:</strong> <span id="preview-nominal"></span></p>
+    <p>
+  <strong>Pengeluaran:</strong>
+  <span id="preview-pengeluaran"></span>
+</p>
+<p>
+  <strong>Keterangan:</strong>
+  <span id="preview-keterangan"></span>
+</p>
 
     <div class="btn-group">
       <button class="btn-edit" id="btn-edit">Edit</button>
@@ -190,6 +216,12 @@ const btnEdit = document.getElementById('btn-edit');
 const btnResend = document.getElementById('btn-resend');
 const btnWA = document.getElementById('btn-wa');
 const lihatDataBtn = document.getElementById('lihatDataBtn');
+const pengeluaranInput = document.getElementById('pengeluaran');
+const keteranganInput = document.getElementById('keterangan');
+const previewPengeluaran = document.getElementById('preview-pengeluaran');
+const previewKeterangan = document.getElementById('preview-keterangan');
+
+
 
 // tombol lihat data
 lihatDataBtn.addEventListener('click', () => {
@@ -204,6 +236,12 @@ tanggalInput.value = tanggalHariIni;
 nominalInput.addEventListener('input', () => {
   let value = nominalInput.value.replace(/\D/g,'');
   nominalInput.value = value ? new Intl.NumberFormat('id-ID').format(value) : '';
+});
+  pengeluaranInput.addEventListener('input', () => {
+  let value = pengeluaranInput.value.replace(/\D/g,'');
+  pengeluaranInput.value = value
+    ? new Intl.NumberFormat('id-ID').format(value)
+    : '';
 });
 
 // load data hari ini
@@ -231,9 +269,22 @@ form.addEventListener('submit', async (e) => {
   if (!tanggal || !nominal) return alert("Isi semua kolom dulu!");
 
   try {
-    await setDoc(doc(db, "penjualan", tanggal), {
-      tanggal, nominal, updatedAt: new Date()
-    }, { merge: true });
+   const pengeluaranNominal = parseInt(
+  pengeluaranInput.value.replace(/\D/g,'')
+) || 0;
+
+const keterangan = keteranganInput.value || "";
+
+await setDoc(doc(db, "penjualan", tanggal), {
+  tanggal,
+  nominal,
+  pengeluaran: {
+    nominal: pengeluaranNominal,
+    keterangan: keterangan
+  },
+  updatedAt: new Date()
+}, { merge: true });
+
 
     previewTanggal.textContent = tanggal;
     previewNominal.textContent = "Rp " + new Intl.NumberFormat('id-ID').format(nominal);
