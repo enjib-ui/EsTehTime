@@ -220,12 +220,21 @@ async function loadData(filterBulan = null, filterTahun = null) {
     }
 
     let index = 1;
+    let totalPengeluaran = 0;
     let total = 0;
 
     snapshot.forEach(docSnap => {
       const data = docSnap.data();
       const tanggal = data.tanggal || docSnap.id;
       const nominal = parseNominal(data.nominal);
+      const pengeluaranNominal = data.pengeluaran
+  ? parseNominal(data.pengeluaran.nominal)
+  : 0;
+
+const pengeluaranKet = data.pengeluaran
+  ? data.pengeluaran.keterangan || ""
+  : "";
+      
       // --- FILTER PER BULAN ---
   if (filterBulan && filterTahun) {
     const [year, month, day] = tanggal.split(/[\/\-]/); // sesuaikan format tanggal kamu
@@ -233,12 +242,25 @@ async function loadData(filterBulan = null, filterTahun = null) {
   }
 
       total += nominal;
+totalPengeluaran += pengeluaranNominal;
 
       const row = document.createElement('tr');
       row.innerHTML = `
         <td>${index}</td>
         <td>${tanggal}</td>
-        <td>Rp ${nominal.toLocaleString('id-ID')}</td>
+       <td>
+  <div><strong>Rp ${nominal.toLocaleString('id-ID')}</strong></div>
+  ${
+    pengeluaranNominal > 0
+      ? `<div style="margin-top:4px;font-size:13px;color:#c0392b">
+           Pengeluaran: Rp ${pengeluaranNominal.toLocaleString('id-ID')}
+         </div>
+         <div style="font-size:12px;color:#555">
+           (${pengeluaranKet || '-'})
+         </div>`
+      : `<div style="margin-top:4px;font-size:12px;color:#777">Tanpa Pengeluaran</div>`
+  }
+</td>
         <td><button class="btn-delete">Hapus</button></td>
       `;
       tbody.appendChild(row);
@@ -256,11 +278,23 @@ async function loadData(filterBulan = null, filterTahun = null) {
         }
       });
 
-      penjualanData.push([index, tanggal, `Rp ${nominal.toLocaleString('id-ID')}`]);
+   penjualanData.push([
+  index,
+  tanggal,
+  `Rp ${nominal.toLocaleString('id-ID')}
+Pengeluaran: Rp ${pengeluaranNominal.toLocaleString('id-ID')}
+${pengeluaranKet ? '(' + pengeluaranKet + ')' : ''}`
+]);
       index++;
     });
 
-    totalNominalEl.textContent = 'Rp ' + total.toLocaleString('id-ID');
+   totalNominalEl.innerHTML =
+  `Rp ${total.toLocaleString('id-ID')}
+   <br>
+   <span style="color:#c0392b;font-size:13px">
+     Pengeluaran: Rp ${totalPengeluaran.toLocaleString('id-ID')}
+   </span>`;
+
 
   } catch (err) {
     tbody.innerHTML = `<tr><td colspan="4">Gagal memuat data: ${err.message}</td></tr>`;
